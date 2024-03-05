@@ -1,2 +1,2 @@
 # DOTS_Project
-Unity Engine Dots Project
+Dots를 사용한 뱀서라이크 프로젝트
