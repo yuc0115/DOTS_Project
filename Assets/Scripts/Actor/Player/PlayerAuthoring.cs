@@ -18,6 +18,8 @@ public class PlayerAuthoring : MonoBehaviour
             moveStat.moveSpeed = authoring.moveSpeed;
             moveStat.rotSpeed = authoring.rotSpeed;
             AddComponent(entity, moveStat);
+
+            AddComponent(entity, new PlayerTag());
         }
     }
 }

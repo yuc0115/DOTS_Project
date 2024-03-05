@@ -3,3 +3,5 @@ Temp/
 Logs/
 .vs/
 obj/
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor.csproj
