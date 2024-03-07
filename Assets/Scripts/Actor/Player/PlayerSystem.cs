@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -10,7 +10,7 @@ public partial struct PlayerSystem : ISystem
     void OnUpdate(ref SystemState state) 
     {
         float deltaTime = SystemAPI.Time.DeltaTime;
-        foreach(var (stat, tr) in SystemAPI.Query<RefRO<ActorMoveStat>, RefRW<LocalTransform>>())
+        foreach(var (stat, tr) in SystemAPI.Query<RefRO<ActorMoveStat>, RefRW<LocalTransform>>().WithAll<PlayerTag>())
         {
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
