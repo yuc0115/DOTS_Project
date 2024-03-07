@@ -21,5 +21,11 @@ public partial struct EnemyMoveSystem : ISystem
             tr.ValueRW = tr.ValueRO.Translate(vNormal * stat.ValueRO.moveSpeed * deltaTime);
             tr.ValueRW.Rotation = Quaternion.Lerp(tr.ValueRO.Rotation, Quaternion.LookRotation(vNormal), deltaTime * stat.ValueRO.rotSpeed);
         }
+
+        foreach (var (goAnim, goTr, localTr) in SystemAPI.Query<ActorModelAnimator, ActorModelTransform, RefRO<LocalTransform>>().WithAll<EnemyTag>())
+        {
+            goTr.trasnform.position = localTr.ValueRO.Position;
+            goTr.trasnform.rotation = localTr.ValueRO.Rotation;
+        }
     }
 }

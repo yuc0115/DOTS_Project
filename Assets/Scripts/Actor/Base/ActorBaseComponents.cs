@@ -1,4 +1,5 @@
 using Unity.Entities;
+using UnityEngine;
 
 #region ActorTag
 public struct PlayerTag : IComponentData{ }
@@ -22,3 +23,21 @@ public struct ActorTarget : IComponentData
 {
     public Entity entity;
 }
+
+
+#region GameObject
+public class ActorModelGO : IComponentData
+{
+    public GameObject actorModel;
+}
+
+public class ActorModelTransform : IComponentData
+{
+    public Transform trasnform;
+}
+
+public class ActorModelAnimator : IComponentData
+{
+    public Animator animator;
+}
+#endregion

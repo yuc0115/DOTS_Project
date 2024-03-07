@@ -26,7 +26,9 @@ public partial struct EnemySpawnSystem : ISystem
             // 태그
             ecb.AddComponent(entity, new EnemyTag());
 
-            SetPosComponent(ref ecb, ref entity);
+            float3 spawnPos = SetPosComponent(ref ecb, ref entity);
+
+            SetModel(ref ecb, ref entity, ref spawnPos);
 
             SetStatComponent(ref ecb, ref entity);
 
@@ -38,7 +40,18 @@ public partial struct EnemySpawnSystem : ISystem
         }
     }
 
-    private void SetPosComponent(ref EntityCommandBuffer ecb, ref Entity entity)
+    private void SetModel(ref EntityCommandBuffer ecb, ref Entity entity, ref float3 spawnPos)
+    {
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        // 모델 생성.
+        GameObject goModel = ResourceManager.Instance.LoadObjectInstantiate("Prefabs/Actor/Knight_Small");
+        goModel.transform.position = spawnPos;
+        ecb.AddComponent(entity, new ActorModelGO { actorModel = goModel });
+        ecb.AddComponent(entity, new ActorModelTransform { trasnform = goModel.transform });
+        ecb.AddComponent(entity, new ActorModelAnimator { animator = goModel.GetComponentInChildren<Animator>() });
+    }
+
+    private float3 SetPosComponent(ref EntityCommandBuffer ecb, ref Entity entity)
     {
         int r = UnityEngine.Random.Range(0, 4);
         float v = UnityEngine.Random.Range(0, 100) * 0.01f;
@@ -80,7 +93,7 @@ public partial struct EnemySpawnSystem : ISystem
         if (physicsWorld.CastRay(input, out var hit) == false)
         {
             Debug.LogWarning("return");
-            return;
+            return float3.zero;
         }
 
         // 좌표 세팅.
@@ -91,6 +104,8 @@ public partial struct EnemySpawnSystem : ISystem
             Scale = 1,
             Rotation = Quaternion.identity
         });
+
+        return spawnPos;
     }
 
     private void SetStatComponent(ref EntityCommandBuffer ecb, ref Entity entity)

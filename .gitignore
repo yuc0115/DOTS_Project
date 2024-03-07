@@ -5,3 +5,5 @@ Logs/
 obj/
 Assembly-CSharp.csproj
 Assembly-CSharp-Editor.csproj
+Assets/2xclusion/
+Assets/2xclusion.meta
