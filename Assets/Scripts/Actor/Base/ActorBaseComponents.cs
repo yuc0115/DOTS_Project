@@ -24,6 +24,11 @@ public struct ActorTarget : IComponentData
     public Entity entity;
 }
 
+public struct ActorState :IComponentData
+{
+    public eActorState actorState;
+}
+
 
 #region GameObject
 public class ActorModelGO : IComponentData

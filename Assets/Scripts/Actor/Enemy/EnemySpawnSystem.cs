@@ -37,6 +37,11 @@ public partial struct EnemySpawnSystem : ISystem
             {
                 entity = SystemAPI.GetSingletonEntity<PlayerTag>()
             });
+
+            ecb.AddComponent(entity, new ActorState
+            {
+                actorState = eActorState.Idle
+            });
         }
     }
 
@@ -97,7 +102,7 @@ public partial struct EnemySpawnSystem : ISystem
         }
 
         // 좌표 세팅.
-        float3 spawnPos = new float3(hit.Position.x, hit.Position.y + 0.5f, hit.Position.z);
+        float3 spawnPos = new float3(hit.Position.x, hit.Position.y + 1f, hit.Position.z);
         ecb.SetComponent(entity, new LocalTransform
         {
             Position = spawnPos,
@@ -115,6 +120,13 @@ public partial struct EnemySpawnSystem : ISystem
         {
             moveSpeed = 5,
             rotSpeed = 20
+        });
+
+        // 사정거리.
+        ecb.AddComponent(entity, new ActorAtkRangeStat
+        {
+            minAtkRange = 3,
+            maxAtkRange = 5
         });
     }
 }
