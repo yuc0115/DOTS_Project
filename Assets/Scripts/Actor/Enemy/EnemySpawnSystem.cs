@@ -28,7 +28,7 @@ public partial struct EnemySpawnSystem : ISystem
 
             float3 spawnPos = SetPosComponent(ref ecb, ref entity);
 
-            SetModel(ref ecb, ref entity, ref spawnPos);
+            SetModel(ref ecb, ref entity, ref spawnPos, ref state);
 
             SetStatComponent(ref ecb, ref entity);
 
@@ -45,13 +45,12 @@ public partial struct EnemySpawnSystem : ISystem
         }
     }
 
-    private void SetModel(ref EntityCommandBuffer ecb, ref Entity entity, ref float3 spawnPos)
+    private void SetModel(ref EntityCommandBuffer ecb, ref Entity entity, ref float3 spawnPos, ref SystemState state)
     {
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // 모델 생성.
         GameObject goModel = ResourceManager.Instance.LoadObjectInstantiate("Prefabs/Actor/Knight_Small");
         goModel.transform.position = spawnPos;
-        ecb.AddComponent(entity, new ActorModelGO { actorModel = goModel });
         ecb.AddComponent(entity, new ActorModelTransform { trasnform = goModel.transform });
         ecb.AddComponent(entity, new ActorModelAnimator { animator = goModel.GetComponentInChildren<Animator>() });
     }
@@ -127,6 +126,12 @@ public partial struct EnemySpawnSystem : ISystem
         {
             minAtkRange = 3,
             maxAtkRange = 5
+        });
+
+        // 체력.
+        ecb.AddComponent(entity, new ActorHP
+        {
+            hp = 100
         });
     }
 }

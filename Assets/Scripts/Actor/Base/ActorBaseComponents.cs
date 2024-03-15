@@ -24,6 +24,11 @@ public struct ActorTarget : IComponentData
     public Entity entity;
 }
 
+public struct ActorHP : IComponentData
+{
+    public float hp;
+}
+
 public struct ActorState :IComponentData
 {
     public eActorState actorState;
@@ -31,12 +36,8 @@ public struct ActorState :IComponentData
 
 
 #region GameObject
-public class ActorModelGO : IComponentData
-{
-    public GameObject actorModel;
-}
 
-public class ActorModelTransform : IComponentData
+public class ActorModelTransform : ICleanupComponentData
 {
     public Transform trasnform;
 }

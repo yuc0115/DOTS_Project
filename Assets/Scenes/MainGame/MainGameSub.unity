@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff6fff8f00c824b49bcc032ac7f67375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnDelay: 0.5
+  spawnDelay: 1
   spawnTime: 0
   normalMonster: {fileID: 5288568587078347929, guid: e752f6bfec72f6a46b29adf8fe4e104e,
     type: 3}
@@ -457,7 +457,7 @@ GameObject:
   - component: {fileID: 1969697131}
   - component: {fileID: 1969697130}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: PhysicsDebugDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -557,20 +557,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4235383323396474049, guid: 3825b3dfcbc4f904b9e4d2e07750fefb,
-        type: 3}
-      propertyPath: rotSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4235383323396474049, guid: 3825b3dfcbc4f904b9e4d2e07750fefb,
-        type: 3}
-      propertyPath: moveSpeed
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 5288568587078347929, guid: 3825b3dfcbc4f904b9e4d2e07750fefb,
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074054162906061629, guid: 3825b3dfcbc4f904b9e4d2e07750fefb,
+        type: 3}
+      propertyPath: delay
+      value: 0.03
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

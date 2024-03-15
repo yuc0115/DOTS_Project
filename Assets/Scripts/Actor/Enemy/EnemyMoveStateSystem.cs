@@ -7,9 +7,9 @@ using Unity.Transforms;
 using UnityEngine;
 using Unity.Physics;
 
-public partial struct EnemyMoveSystem : ISystem
+
+public partial struct EnemyMoveStateSystem : ISystem
 {
-    [BurstCompile]
     void OnUpdate(ref SystemState state)
     {
         float deltaTime = SystemAPI.Time.DeltaTime;
@@ -29,13 +29,10 @@ public partial struct EnemyMoveSystem : ISystem
             tr.ValueRW.Rotation = Quaternion.Lerp(tr.ValueRO.Rotation, Quaternion.LookRotation(vNormal), deltaTime * moveStat.ValueRO.rotSpeed);
         }
      
-
         foreach (var (goAnim, goTr, localTr) in SystemAPI.Query<ActorModelAnimator, ActorModelTransform, RefRO<LocalTransform>>().WithAll<EnemyTag>())
         {
             goTr.trasnform.position = localTr.ValueRO.Position;
             goTr.trasnform.rotation = localTr.ValueRO.Rotation;
         }
-
-        
     }
 }

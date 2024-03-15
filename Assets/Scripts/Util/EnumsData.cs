@@ -12,5 +12,6 @@ public enum eActorState : byte
     Idle,
     Move,
     Attack,
+    Die,
     End,
 }
