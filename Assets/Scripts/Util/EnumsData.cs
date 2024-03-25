@@ -1,3 +1,10 @@
+public enum eResDatas
+{
+    Actor_normal,
+    Projectile_Normal,
+    End
+}
+
 public enum ePhysicsCategoryNames
 {
     Terrain = 1,

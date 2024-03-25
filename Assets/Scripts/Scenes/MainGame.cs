@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 
 public class MainGame : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public World _world;
+
+    private void Awake()
     {
-        
+        //_world = World.DefaultGameObjectInjectionWorld;
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        _world = World.DefaultGameObjectInjectionWorld;
+        Entity entity = _world.EntityManager.CreateEntity();
+        Debug.LogError(entity);
+        _world.EntityManager.AddComponent<GameInitialzeSystem>(entity);
+        //_world.EntityManager.AddComponent<>
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2990786263935446666}
   - component: {fileID: 187058873085383406}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Actor_Normal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_ShapeType: 0
   m_PrimitiveCenter:
     x: 0
-    y: 0
+    y: 1
     z: 0
   m_PrimitiveSize:
     x: 1
@@ -201,5 +201,5 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0

@@ -5,28 +5,28 @@ using UnityEngine;
 
 public partial struct SkillCollision : ISystem
 {
-    public ComponentLookup<ActorHP> actorHPGroup11;
+    public ComponentLookup<ActorHP> actorHPGroup;
     
 
     void OnCreate(ref SystemState state)
     {
-        actorHPGroup11 = state.GetComponentLookup<ActorHP>();
+        actorHPGroup = state.GetComponentLookup<ActorHP>();
     }
 
     void OnUpdate(ref SystemState state)
     {
-        actorHPGroup11.Update(ref state);
+        actorHPGroup.Update(ref state);
         var simulation = SystemAPI.GetSingletonRW<SimulationSingleton>();
         
-        state.Dependency = new SkillTEstHitJob()
+        state.Dependency = new SkillCollisionJob()
         {
-            actorHPGroup = actorHPGroup11
+            actorHPGroup = actorHPGroup
         }.Schedule(simulation.ValueRW, state.Dependency);
     }
 }
 
 
-public struct SkillTEstHitJob : ITriggerEventsJob
+public struct SkillCollisionJob : ITriggerEventsJob
 {
     public ComponentLookup<ActorHP> actorHPGroup;
     

@@ -47,3 +47,4 @@ public class ActorModelAnimator : IComponentData
     public Animator animator;
 }
 #endregion
+

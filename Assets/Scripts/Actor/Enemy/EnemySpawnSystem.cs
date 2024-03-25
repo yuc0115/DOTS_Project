@@ -16,19 +16,24 @@ public partial struct EnemySpawnSystem : ISystem
 
         foreach(var (spawnTime, spawnRes) in SystemAPI.Query<RefRW<EnemySpawnTime>, RefRO<EnemySpawnRes>>())
         {
+            if (SystemAPI.HasSingleton<ResData>() == false)
+                continue;
+
             if (spawnTime.ValueRO.spawnTime >= SystemAPI.Time.ElapsedTime)
                 return;
 
             spawnTime.ValueRW.spawnTime += spawnTime.ValueRO.spawnDelay;
+
+            var resBuffer = SystemAPI.GetSingletonBuffer<ResData>();
             var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-            var entity = ecb.Instantiate(spawnRes.ValueRO.entityEnemy);
+            var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Actor_normal].prefab);
 
             // 태그
             ecb.AddComponent(entity, new EnemyTag());
 
             float3 spawnPos = SetPosComponent(ref ecb, ref entity);
 
-            SetModel(ref ecb, ref entity, ref spawnPos, ref state);
+            SetModel(ref ecb, ref entity, ref spawnPos);
 
             SetStatComponent(ref ecb, ref entity);
 
@@ -45,7 +50,7 @@ public partial struct EnemySpawnSystem : ISystem
         }
     }
 
-    private void SetModel(ref EntityCommandBuffer ecb, ref Entity entity, ref float3 spawnPos, ref SystemState state)
+    private void SetModel(ref EntityCommandBuffer ecb, ref Entity entity, ref float3 spawnPos)
     {
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // 모델 생성.
