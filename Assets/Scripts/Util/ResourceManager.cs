@@ -23,4 +23,10 @@ public class ResourceManager : Singleton<ResourceManager>
         go = GameObject.Instantiate(go);
         return go;
     }
+
+
+    public string GetPathActorRes()
+    {
+        return "Prefabs/Actor";
+    }
 }

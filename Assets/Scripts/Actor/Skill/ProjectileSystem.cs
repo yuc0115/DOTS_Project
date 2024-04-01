@@ -21,7 +21,6 @@ public partial struct ProjectileSystem : ISystem
         {
             if (destroyTime.ValueRO.deleteTime > elTime)
                 continue;
-
             
             var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             ecb.DestroyEntity(entity);

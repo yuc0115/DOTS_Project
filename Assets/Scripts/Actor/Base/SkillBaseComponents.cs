@@ -8,6 +8,13 @@ public struct ProjectileFire : IComponentData
     public float spawnDelay;
 }
 
+public struct SkillTrigger : IComponentData
+{
+    public bool isTrigger;
+    public bool isFire;
+    public int id;
+}
+
 public struct Projectile : IComponentData
 {
     public float speed;
@@ -17,6 +24,13 @@ public struct Projectile : IComponentData
 public struct ProjectileDestroyTime : IComponentData
 {
     public double deleteTime;
+}
+
+public struct AutoSkillData : IComponentData
+{
+    public uint skillID;
+    public double fireTime;
+    public float fireDelay;
 }
 
 #region GameObject

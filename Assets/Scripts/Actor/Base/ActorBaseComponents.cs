@@ -36,6 +36,10 @@ public struct ActorState :IComponentData
 
 
 #region GameObject
+public struct IsActorInit : IComponentData, IEnableableComponent
+{
+    public uint actorTableID;
+}
 
 public class ActorModelTransform : ICleanupComponentData
 {

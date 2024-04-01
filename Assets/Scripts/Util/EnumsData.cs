@@ -22,3 +22,9 @@ public enum eActorState : byte
     Die,
     End,
 }
+
+public enum eSkillType
+{
+    None = 0,
+    AutoSkill,
+}

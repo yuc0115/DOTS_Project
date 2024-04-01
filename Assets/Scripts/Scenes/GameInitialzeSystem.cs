@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
@@ -6,20 +7,23 @@ using Unity.Transforms;
 using UnityEngine;
 
 
+[UpdateInGroup(typeof(InitializationSystemGroup))]
 public partial struct GameInitialzeSystem : ISystem
 {
     void OnUpdate(ref SystemState state)
     {
-        CreatePlayer(ref state);
-    }
-
-    private void CreatePlayer(ref SystemState state)
-    {
         if (SystemAPI.HasSingleton<ResData>() == false)
             return;
 
+        CreatePlayer(ref state, 1);
+
+        state.Enabled = false;
+    }
+
+    private void CreatePlayer(ref SystemState state, uint actorID)
+    {
         var resBuffer = SystemAPI.GetSingletonBuffer<ResData>();
-        var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+        var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
         var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Actor_normal].prefab);
 
         ecb.AddComponent(entity, new PlayerTag());
@@ -32,43 +36,16 @@ public partial struct GameInitialzeSystem : ISystem
             Rotation = quaternion.identity
         });
 
-        SetStatComponent(ref ecb, ref entity);
+        ecb.AddComponent(entity, new IsActorInit { actorTableID = actorID });
 
-        SetModel(ref ecb, ref entity, ref spawnPos);
+        ecb.SetName(entity, "PlayerEntity");
 
-        // 기본 스킬 등록.
-        ecb.AddComponent(entity, new ProjectileFire
-        {
-            spawnTime = 0,
-            spawnDelay = 0.05f,
-        });
+        ecb.AddComponent(entity, new ControllEnable());
 
-        state.Enabled = false;
-    }
+        ecb.AddComponent<SkillTrigger>(entity);
 
-    private void SetModel(ref EntityCommandBuffer ecb, ref Entity entity, ref float3 spawnPos)
-    {
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        // 모델 생성.
-        GameObject goModel = ResourceManager.Instance.LoadObjectInstantiate("Prefabs/Actor/PlayerModel");
-        goModel.transform.position = spawnPos;
-        ecb.AddComponent(entity, new ActorModelTransform { trasnform = goModel.transform });
-        ecb.AddComponent(entity, new ActorModelAnimator { animator = goModel.GetComponentInChildren<Animator>() });
-    }
-
-    private void SetStatComponent(ref EntityCommandBuffer ecb, ref Entity entity)
-    {
-        // 이동 스텟
-        ecb.AddComponent(entity, new ActorMoveStat
-        {
-            moveSpeed = 10,
-            rotSpeed = 20
-        });
-
-        // 체력.
-        ecb.AddComponent(entity, new ActorHP
-        {
-            hp = 100
-        });
+        // 회피 기능 추가.
+        ecb.AddComponent(entity, new Dodge());
+        ecb.SetComponentEnabled<Dodge>(entity, false);
     }
 }

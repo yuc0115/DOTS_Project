@@ -11,12 +11,13 @@ public partial struct DodgeSystem : ISystem
     {
         float deltaTime = SystemAPI.Time.DeltaTime;
         double elTime = SystemAPI.Time.ElapsedTime;
-        foreach (var (anim, dodge, stat, tr, entity) in SystemAPI.Query<ActorModelAnimator, RefRW<Dodge>, RefRO<ActorMoveStat>, RefRW<LocalTransform>>().WithEntityAccess())
+        foreach (var (animator, dodge, stat, tr, entity) in SystemAPI.Query<ActorModelAnimator, RefRW<Dodge>, RefRO<ActorMoveStat>, RefRW<LocalTransform>>().WithEntityAccess())
         {
             if (dodge.ValueRO.isTrigger)
             {
                 state.EntityManager.SetComponentEnabled<ControllEnable>(entity, false);
-                anim.animator.SetTrigger("doDodge");
+                animator.animator.SetTrigger("doDodge");
+
                 dodge.ValueRW.isTrigger = false;
             }
 

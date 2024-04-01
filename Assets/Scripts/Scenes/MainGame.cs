@@ -9,14 +9,15 @@ public class MainGame : MonoBehaviour
 
     private void Awake()
     {
-        //_world = World.DefaultGameObjectInjectionWorld;
+        TableManager.Instance.LoadTable();
+        _world = World.DefaultGameObjectInjectionWorld;
+        
     }
 
     void Start()
     {
         _world = World.DefaultGameObjectInjectionWorld;
         Entity entity = _world.EntityManager.CreateEntity();
-        Debug.LogError(entity);
         _world.EntityManager.AddComponent<GameInitialzeSystem>(entity);
         //_world.EntityManager.AddComponent<>
     }

@@ -21,7 +21,7 @@ public partial struct PlayerSystem : ISystem
         _normal = Vector3.Normalize(_normal);
 
         foreach (var (stat, tr) in SystemAPI.Query<RefRO<ActorMoveStat>, RefRW<LocalTransform>>().WithAll<PlayerTag>().WithAll<ControllEnable>())
-        {   
+        {
             tr.ValueRW = tr.ValueRO.Translate(_normal * stat.ValueRO.moveSpeed * deltaTime);
             tr.ValueRW.Rotation = Quaternion.Lerp(tr.ValueRO.Rotation, Quaternion.LookRotation(GetLookVector(tr.ValueRO.Position)), deltaTime * stat.ValueRO.rotSpeed);
         }
