@@ -171,53 +171,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &469828292
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 469828293}
-  - component: {fileID: 469828294}
-  m_Layer: 0
-  m_Name: GemSpawn
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &469828293
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469828292}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &469828294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469828292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07f21bd2817708046bba7a039b3bbec6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goGem: {fileID: 2972297608669958211, guid: 26864b76962828d4aa18a765c049f462, type: 3}
-  spawnTime: 0
-  delay: 0.1
 --- !u!1 &649890403
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,6 +407,7 @@ MonoBehaviour:
   prefabs:
   - {fileID: 5288568587078347929, guid: 633e0ef516b4f8b4cbdfbe9c089290b7, type: 3}
   - {fileID: 1573301267260194, guid: 6c0136fc6a3f59b4384195e78ac0f318, type: 3}
+  - {fileID: 2972297608669958211, guid: 26864b76962828d4aa18a765c049f462, type: 3}
 --- !u!1 &1014609820
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,4 +921,3 @@ SceneRoots:
   - {fileID: 787260467}
   - {fileID: 1857399423}
   - {fileID: 649890406}
-  - {fileID: 469828293}
