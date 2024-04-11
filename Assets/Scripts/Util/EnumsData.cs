@@ -2,6 +2,7 @@ public enum eResDatas
 {
     Actor_normal,
     Projectile_Normal,
+    Gem,
     End
 }
 
@@ -12,6 +13,15 @@ public enum ePhysicsCategoryNames
     Enemy = 1 << 2,
     End = 1 << 3
 }
+
+public enum eActorType
+{
+    None = -1,
+    Player,
+    Enemy,
+    End,
+}
+
 
 public enum eActorState : byte
 {

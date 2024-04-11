@@ -14,11 +14,10 @@ public class PanelTarget : MonoBehaviour
         Vector3 vCenter = _uiCam.ScreenToWorldPoint(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0));
         Vector3 vMouse = _uiCam.ScreenToWorldPoint(Input.mousePosition);
 
-        Vector3 vc = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0));
-        Vector3 vm = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
+        vCenter.z = 0;
+        vMouse.z = 0;
         Vector3 v = (vMouse - vCenter).normalized;
-        v.z = 0;
+        
         _targetImg.transform.localPosition = v * _targetImgDist;
     }
 }

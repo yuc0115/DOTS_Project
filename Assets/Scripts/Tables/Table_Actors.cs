@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public class Table_ActorData
 {
     public uint id;
-    
+
+    public eActorType actorType;
+
     // 스텟 관련
     public int hp;
     public float moveSpeed;
@@ -49,6 +51,7 @@ public class Table_Actors : TableBase<Table_Actors>
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         data = new Table_ActorData();
         data.id = 1;
+        data.actorType = eActorType.Player;
 
         data.hp = 100;
         data.moveSpeed = 10;
@@ -66,6 +69,7 @@ public class Table_Actors : TableBase<Table_Actors>
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         data = new Table_ActorData();
         data.id = 2;
+        data.actorType = eActorType.Enemy;
 
         data.hp = 100;
         data.moveSpeed = 8;

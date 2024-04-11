@@ -1,4 +1,4 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -20,13 +20,13 @@ public partial struct PlayerSystem : ISystem
         _normal.z = vertical;
         _normal = Vector3.Normalize(_normal);
 
-        foreach (var (stat, tr) in SystemAPI.Query<RefRO<ActorMoveStat>, RefRW<LocalTransform>>().WithAll<PlayerTag>().WithAll<ControllEnable>())
+        foreach (var (stat, tr) in SystemAPI.Query<RefRO<ActorData_MoveStat>, RefRW<LocalTransform>>().WithAll<PlayerTag>().WithAll<ControllEnable>())
         {
             tr.ValueRW = tr.ValueRO.Translate(_normal * stat.ValueRO.moveSpeed * deltaTime);
             tr.ValueRW.Rotation = Quaternion.Lerp(tr.ValueRO.Rotation, Quaternion.LookRotation(GetLookVector(tr.ValueRO.Position)), deltaTime * stat.ValueRO.rotSpeed);
         }
 
-        foreach (var (goAnim, goTr, localTr) in SystemAPI.Query<ActorModelAnimator, ActorModelTransform, RefRO<LocalTransform>>().WithAll<PlayerTag>())
+        foreach (var (goAnim, goTr, localTr) in SystemAPI.Query<ActorData_ModelAnimator, ActorData_ModelTransform, RefRO<LocalTransform>>().WithAll<PlayerTag>())
         {
             goTr.trasnform.position = localTr.ValueRO.Position;
             goTr.trasnform.rotation = localTr.ValueRO.Rotation;
@@ -65,12 +65,17 @@ public partial struct PlayerSystem : ISystem
     {
         Camera mainCam = Camera.main;
 
-        float3 vCenter = playerPos;
-        vCenter.y = 0;
-        float3 vMouse = mainCam.ScreenToWorldPoint(Input.mousePosition);
-        vMouse.y = 0;
+        float3 pos = playerPos;
+        float3 vMouse = float3.zero;
+        Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            vMouse = hit.point;
+        }
 
-        float3 v = Vector3.Normalize(vMouse - vCenter);
+        float3 v = Vector3.Normalize(vMouse - pos);
+        v.y = 0;
         return v;
     }
 }

@@ -34,12 +34,12 @@ public partial struct EnemySpawnSystem : ISystem
             SetPosComponent(ref ecb, ref entity);
 
             //// 타겟 설정.
-            ecb.AddComponent(entity, new ActorTarget
+            ecb.AddComponent(entity, new ActorData_Target
             {
                 entity = SystemAPI.GetSingletonEntity<PlayerTag>()
             });
 
-            ecb.AddComponent(entity, new ActorState
+            ecb.AddComponent(entity, new ActorData_State
             {
                 actorState = eActorState.Idle
             });

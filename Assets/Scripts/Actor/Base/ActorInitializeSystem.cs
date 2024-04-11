@@ -19,9 +19,12 @@ public partial struct ActorInitializeSystem : ISystem
             GameObject actorModel = SetModel(in ecb, in entity, tr.ValueRO.Position, in tableActorData);
 
             SetSkillComponent(in ecb, in entity, in tableActorData);
+
             // 모노 붙임.
             ActorBaseMono actor = actorModel.AddComponent<ActorBaseMono>();
-            actor.SetEntity(entity);
+            actor.SetEntity(entity, tableActorData.actorType);
+
+            ecb.AddComponent<ActorData_Hit>(entity);
         }
     }
 
@@ -46,7 +49,7 @@ public partial struct ActorInitializeSystem : ISystem
         void SetAutoSkill(in EntityCommandBuffer ecb, in Entity entity, in Table_SkillData data)
         {
             // 기본 스킬 등록.
-            ecb.AddComponent(entity, new AutoSkillData
+            ecb.AddComponent(entity, new SkillData_AutoSkill
             {
                 skillID = data.id,
                 fireDelay = data.fireDelay,
@@ -57,20 +60,20 @@ public partial struct ActorInitializeSystem : ISystem
     private void SetStatComponent(in EntityCommandBuffer ecb, in Entity entity, in Table_ActorData tableActorData)
     {
         // 이동 스텟
-        ecb.AddComponent(entity, new ActorMoveStat
+        ecb.AddComponent(entity, new ActorData_MoveStat
         {
             moveSpeed = tableActorData.moveSpeed,
             rotSpeed = tableActorData.rotSpeed
         });
 
         // 체력.
-        ecb.AddComponent(entity, new ActorHP
+        ecb.AddComponent(entity, new ActorData_HP
         {
             hp = tableActorData.hp
         });
 
         // 사정거리.
-        ecb.AddComponent(entity, new ActorAtkRangeStat
+        ecb.AddComponent(entity, new ActorData_AtkRangeStat
         {
             minAtkRange = tableActorData.minAtkRange,
             maxAtkRange = tableActorData.maxAtkRange
@@ -92,8 +95,8 @@ public partial struct ActorInitializeSystem : ISystem
         GameObject goModel = ResourceManager.Instance.LoadObjectInstantiate(string.Format("{0}/{1}", ResourceManager.Instance.GetPathActorRes(),  tableActorData.resPath));
         goModel.transform.position = spawnPos;
 
-        ecb.AddComponent(entity, new ActorModelTransform { trasnform = goModel.transform });
-        ecb.AddComponent(entity, new ActorModelAnimator { animator = goModel.GetComponent<Animator>() });
+        ecb.AddComponent(entity, new ActorData_ModelTransform { trasnform = goModel.transform });
+        ecb.AddComponent(entity, new ActorData_ModelAnimator { animator = goModel.GetComponent<Animator>() });
 
         return goModel;
     }

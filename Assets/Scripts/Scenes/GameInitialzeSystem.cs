@@ -15,15 +15,35 @@ public partial struct GameInitialzeSystem : ISystem
         if (SystemAPI.HasSingleton<ResData>() == false)
             return;
 
-        CreatePlayer(ref state, 1);
+        var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+        CreatePlayer(in state, in ecb, 1);
+
+        CreateTimer(in state, in ecb);
+
+        CreateGemSpawner(in state, in ecb);
 
         state.Enabled = false;
     }
 
-    private void CreatePlayer(ref SystemState state, uint actorID)
+    private void CreateGemSpawner(in SystemState state, in EntityCommandBuffer ecb)
+    {
+        var entity = ecb.CreateEntity();
+
+        ecb.SetName(entity, "GemSpawner");
+        ecb.AddComponent(entity, new GemSpawnData { isTrigger = false });
+    }
+
+    private void CreateTimer(in SystemState state, in EntityCommandBuffer ecb)
+    {
+        var entity = ecb.CreateEntity();
+
+        ecb.SetName(entity, "Timer");
+        ecb.AddComponent(entity, new GameTime { time = 0 });
+    }
+
+    private void CreatePlayer(in SystemState state, in EntityCommandBuffer ecb, uint actorID)
     {
         var resBuffer = SystemAPI.GetSingletonBuffer<ResData>();
-        var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
         var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Actor_normal].prefab);
 
         ecb.AddComponent(entity, new PlayerTag());
@@ -42,7 +62,7 @@ public partial struct GameInitialzeSystem : ISystem
 
         ecb.AddComponent(entity, new ControllEnable());
 
-        ecb.AddComponent<SkillTrigger>(entity);
+        ecb.AddComponent<SkillData_Trigger>(entity);
 
         // 회피 기능 추가.
         ecb.AddComponent(entity, new Dodge());

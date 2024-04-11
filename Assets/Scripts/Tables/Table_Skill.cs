@@ -43,7 +43,7 @@ public class Table_Skill : TableBase<Table_Skill>
         data.id = 1;
         data.skillType = eSkillType.AutoSkill;
         data.damage = 5;
-        data.fireDelay = 1.5f;
+        data.fireDelay = 1f;
 
         _data.Add(data.id, data);
 

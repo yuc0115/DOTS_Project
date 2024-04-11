@@ -11,14 +11,11 @@ public class MainGame : MonoBehaviour
     {
         TableManager.Instance.LoadTable();
         _world = World.DefaultGameObjectInjectionWorld;
-        
     }
 
     void Start()
     {
-        _world = World.DefaultGameObjectInjectionWorld;
         Entity entity = _world.EntityManager.CreateEntity();
         _world.EntityManager.AddComponent<GameInitialzeSystem>(entity);
-        //_world.EntityManager.AddComponent<>
     }
 }

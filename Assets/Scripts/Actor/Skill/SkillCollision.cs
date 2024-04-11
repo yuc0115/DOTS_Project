@@ -1,26 +1,31 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
 using UnityEngine;
 
 public partial struct SkillCollision : ISystem
 {
-    public ComponentLookup<ActorHP> actorHPGroup;
-    
+    public ComponentLookup<ActorData_Hit> actorHitGroup;
+    public ComponentLookup<SkillData_Damage> skillDamageGroup;
 
     void OnCreate(ref SystemState state)
     {
-        actorHPGroup = state.GetComponentLookup<ActorHP>();
+        actorHitGroup = state.GetComponentLookup<ActorData_Hit>();
+        skillDamageGroup = state.GetComponentLookup<SkillData_Damage>(true);
     }
 
     void OnUpdate(ref SystemState state)
     {
-        actorHPGroup.Update(ref state);
+        actorHitGroup.Update(ref state);
+        skillDamageGroup.Update(ref state);
+
         var simulation = SystemAPI.GetSingletonRW<SimulationSingleton>();
-        
+
         state.Dependency = new SkillCollisionJob()
         {
-            actorHPGroup = actorHPGroup
+            actorHitGroup = actorHitGroup,
+            skillDamageGroup = skillDamageGroup
         }.Schedule(simulation.ValueRW, state.Dependency);
     }
 }
@@ -28,28 +33,55 @@ public partial struct SkillCollision : ISystem
 
 public struct SkillCollisionJob : ITriggerEventsJob
 {
-    public ComponentLookup<ActorHP> actorHPGroup;
-    
+    public ComponentLookup<ActorData_Hit> actorHitGroup;
+    [ReadOnly] public ComponentLookup<SkillData_Damage> skillDamageGroup;
+
     public void Execute(TriggerEvent triggerEvent)
     {
         var entityA = triggerEvent.EntityA;
         var entityB = triggerEvent.EntityB;
 
-        bool isHPComponentA = actorHPGroup.HasComponent(entityA);
-        bool isHPComponentB = actorHPGroup.HasComponent(entityB);
+        bool ishitComponentA = actorHitGroup.HasComponent(entityA);
+        bool ishitComponentB = actorHitGroup.HasComponent(entityB);
 
-        if (isHPComponentA)
+        if (ishitComponentA)
         {
-            var actorHP = actorHPGroup[entityA];
-            actorHP.hp = 0;
-            actorHPGroup[entityA] = actorHP;
+            if (skillDamageGroup.HasComponent(entityB) == false)
+            {
+                Debug.LogErrorFormat("HasComponent null! : {0}", entityB);
+                return;
+            }
+            var skillDamage = skillDamageGroup[entityB];
+
+            var hit = actorHitGroup[entityA];
+            if (hit.trigger == true)
+            {
+                Debug.LogError("충돌 중첩?");
+            }
+            hit.trigger = true;
+            hit.damage = skillDamage.damage;
+            hit.attacker = entityB;
+            actorHitGroup[entityA] = hit;
         }
 
-        if (isHPComponentB)
+        if (ishitComponentB)
         {
-            var actorHP = actorHPGroup[entityB];
-            actorHP.hp = 0;
-            actorHPGroup[entityB] = actorHP;
+            if (skillDamageGroup.HasComponent(entityA) == false)
+            {
+                Debug.LogErrorFormat("HasComponent null! : {0}", entityA);
+                return;
+            }
+            var skillDamage = skillDamageGroup[entityA];
+
+            var hit = actorHitGroup[entityB];
+            if (hit.trigger == true)
+            {
+                Debug.LogError("충돌 중첩?");
+            }
+            hit.trigger = true;
+            hit.damage = skillDamage.damage;
+            hit.attacker = entityA;
+            actorHitGroup[entityB] = hit;
         }
     }
 }

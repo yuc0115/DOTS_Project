@@ -11,7 +11,7 @@ public partial struct EnemyStateSystem : ISystem
 {
     void OnUpdate(ref SystemState state)
     {
-        foreach (var (actorState, target, rangeStat, tr, actorHP) in SystemAPI.Query<RefRW<ActorState>, RefRO<ActorTarget>, RefRO<ActorAtkRangeStat>, RefRO<LocalTransform>, RefRO<ActorHP>>().WithAll<EnemyTag>())
+        foreach (var (actorState, target, rangeStat, tr, actorHP) in SystemAPI.Query<RefRW<ActorData_State>, RefRO<ActorData_Target>, RefRO<ActorData_AtkRangeStat>, RefRO<LocalTransform>, RefRO<ActorData_HP>>().WithAll<EnemyTag>())
         {
             if (actorHP.ValueRO.hp <= 0)
             {

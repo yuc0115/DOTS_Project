@@ -9,14 +9,14 @@ public partial struct AutoSkillSystem : ISystem
     [BurstCompile]
     void OnUpdate(ref SystemState state)
     {
-        foreach (var (timer, skillTrigger) in SystemAPI.Query<RefRW<AutoSkillData>, RefRW<SkillTrigger>>())
+        foreach (var (skillData, skillTrigger) in SystemAPI.Query<RefRW<SkillData_AutoSkill>, RefRW<SkillData_Trigger>>())
         {
-            if (timer.ValueRO.fireTime > SystemAPI.Time.ElapsedTime)
+            if (skillData.ValueRO.fireTime > SystemAPI.Time.ElapsedTime)
                 continue;
 
-            timer.ValueRW.fireTime = SystemAPI.Time.ElapsedTime + timer.ValueRO.fireDelay;
+            skillData.ValueRW.fireTime = SystemAPI.Time.ElapsedTime + skillData.ValueRO.fireDelay;
 
-            skillTrigger.ValueRW.id = UnityEngine.Random.Range(0, 10000);
+            skillTrigger.ValueRW.id = skillData.ValueRO.skillID;
             skillTrigger.ValueRW.isTrigger = true;
         }
     }

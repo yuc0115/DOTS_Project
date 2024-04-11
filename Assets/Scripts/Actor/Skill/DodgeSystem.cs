@@ -11,7 +11,7 @@ public partial struct DodgeSystem : ISystem
     {
         float deltaTime = SystemAPI.Time.DeltaTime;
         double elTime = SystemAPI.Time.ElapsedTime;
-        foreach (var (animator, dodge, stat, tr, entity) in SystemAPI.Query<ActorModelAnimator, RefRW<Dodge>, RefRO<ActorMoveStat>, RefRW<LocalTransform>>().WithEntityAccess())
+        foreach (var (animator, dodge, stat, tr, entity) in SystemAPI.Query<ActorData_ModelAnimator, RefRW<Dodge>, RefRO<ActorData_MoveStat>, RefRW<LocalTransform>>().WithEntityAccess())
         {
             if (dodge.ValueRO.isTrigger)
             {

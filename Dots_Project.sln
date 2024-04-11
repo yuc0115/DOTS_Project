@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Physics.Custom", "Uni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{7A136353-7939-AD3A-0A24-B9C3B568E463}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamageNumbersPro", "DamageNumbersPro.csproj", "{39B55132-8F20-CC5E-6347-F2643BB6F76F}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Physics.Custom.Editor", "Unity.Physics.Custom.Editor.csproj", "{D91DDC5D-B3B2-9F14-A2EB-55E793364801}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{95CE8264-C813-98E1-12BB-05962033C328}"
@@ -23,6 +25,10 @@ Global
 		{7A136353-7939-AD3A-0A24-B9C3B568E463}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A136353-7939-AD3A-0A24-B9C3B568E463}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A136353-7939-AD3A-0A24-B9C3B568E463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39B55132-8F20-CC5E-6347-F2643BB6F76F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39B55132-8F20-CC5E-6347-F2643BB6F76F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39B55132-8F20-CC5E-6347-F2643BB6F76F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39B55132-8F20-CC5E-6347-F2643BB6F76F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D91DDC5D-B3B2-9F14-A2EB-55E793364801}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D91DDC5D-B3B2-9F14-A2EB-55E793364801}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D91DDC5D-B3B2-9F14-A2EB-55E793364801}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,32 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using Unity.Physics;
-
 
 public partial struct EnemyDieStateSystem : ISystem
 {
     void OnUpdate(ref SystemState state)
     {
         var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-        foreach (var (actorState, entity) in SystemAPI.Query<RefRO<ActorState>>().WithAll<EnemyTag>().WithEntityAccess())
+        foreach (var (goAnim, actorState, tr, entity) in SystemAPI.Query<ActorData_ModelAnimator, RefRO<ActorData_State>, RefRO<LocalTransform>>().WithAll<EnemyTag>().WithEntityAccess())
         {
             if (actorState.ValueRO.actorState != eActorState.Die)
                 continue;
 
+            goAnim.animator.SetTrigger("doDeath");
+
             ecb.DestroyEntity(entity);
+
+
+            // gem 생성.
+            GemSpawnData gemSpawnData = SystemAPI.GetSingleton<GemSpawnData>();
+            if (gemSpawnData.isTrigger == true)
+            {
+                Debug.LogError("true 상태다!");
+                continue;
+            }
+            gemSpawnData.isTrigger = true;
+            gemSpawnData.spawnPos = tr.ValueRO.Position;
+            SystemAPI.SetSingleton<GemSpawnData>(gemSpawnData);
         }
 
         // 모델 삭제 처리. 
-        foreach (var (actorModel, entity) in SystemAPI.Query<ActorModelTransform>().WithNone<LocalToWorld>().WithEntityAccess())
-        {
-            if (actorModel.trasnform != null)
-                GameObject.Destroy(actorModel.trasnform.gameObject);
-            ecb.RemoveComponent<ActorModelTransform>(entity);
-        }
+        //foreach (var (actorModel, entity) in SystemAPI.Query<ActorData_ModelTransform>().WithNone<LocalToWorld>().WithEntityAccess())
+        //{
+        //    if (actorModel.trasnform != null)
+        //        GameObject.Destroy(actorModel.trasnform.gameObject);
+        //    ecb.RemoveComponent<ActorData_ModelTransform>(entity);
+        //}
     }
 }

@@ -1,4 +1,6 @@
-﻿using Unity.Entities;
+﻿using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,11 +10,16 @@ public struct ProjectileFire : IComponentData
     public float spawnDelay;
 }
 
-public struct SkillTrigger : IComponentData
+public struct SkillData_Trigger : IComponentData
 {
     public bool isTrigger;
     public bool isFire;
-    public int id;
+    public uint id;
+}
+
+public struct SkillData_Damage : IComponentData
+{
+    public int damage;
 }
 
 public struct Projectile : IComponentData
@@ -26,11 +33,22 @@ public struct ProjectileDestroyTime : IComponentData
     public double deleteTime;
 }
 
-public struct AutoSkillData : IComponentData
+public struct SkillData_AutoSkill : IComponentData
 {
     public uint skillID;
     public double fireTime;
     public float fireDelay;
+}
+
+public class SkillData_Hit : IComponentData
+{
+    public List<HitDataItem> hitDatas;
+}
+
+public struct HitDataItem
+{
+    public Entity hitEntity;
+    public double hitTime;
 }
 
 #region GameObject

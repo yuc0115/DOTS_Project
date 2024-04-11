@@ -9,7 +9,7 @@ public partial struct SKillFireSystem : ISystem
 {
     void OnUpdate(ref SystemState state)
     {
-        foreach (var (SkillData, tr) in SystemAPI.Query<RefRW<SkillTrigger>, RefRO<LocalTransform>>())
+        foreach (var (SkillData, tr) in SystemAPI.Query<RefRW<SkillData_Trigger>, RefRO<LocalTransform>>())
         {
             if (SkillData.ValueRO.isFire == false)
                 continue;
@@ -22,12 +22,19 @@ public partial struct SKillFireSystem : ISystem
             var resBuffer = SystemAPI.GetSingletonBuffer<ResData>();
             var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Projectile_Normal].prefab);
+            var skillTable = Table_Skill.instance.GetData(SkillData.ValueRO.id);
 
             ecb.SetComponent(entity, new LocalTransform
             {
                 Position = tr.ValueRO.Forward() + tr.ValueRO.Position + new float3(0, 1, 0),
                 Scale = 1,
-                Rotation = Quaternion.identity
+                Rotation = tr.ValueRO.Rotation
+            });
+
+            // 스킬 데미지.
+            ecb.AddComponent(entity, new SkillData_Damage
+            {
+                damage = skillTable.damage
             });
 
             ecb.AddComponent(entity, new Projectile
@@ -42,6 +49,10 @@ public partial struct SKillFireSystem : ISystem
                 deleteTime = elTime + 1
             });
 
+            ecb.AddComponent(entity, new SkillData_Hit
+            {
+                hitDatas = new List<HitDataItem>()
+            });
             // 태그.
             ecb.AddComponent(entity, new SkillTag());
         }
