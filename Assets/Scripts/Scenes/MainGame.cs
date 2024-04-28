@@ -15,7 +15,15 @@ public class MainGame : MonoBehaviour
 
     void Start()
     {
+        GameInitialize();
+        
+    }
+
+    private void GameInitialize()
+    {
         Entity entity = _world.EntityManager.CreateEntity();
         _world.EntityManager.AddComponent<GameInitialzeSystem>(entity);
+
+        GameManager.Instance.playerData.SetLevel(1);
     }
 }

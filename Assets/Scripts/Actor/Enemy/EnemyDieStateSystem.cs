@@ -20,13 +20,10 @@ public partial struct EnemyDieStateSystem : ISystem
 
             // gem 생성.
             GemSpawnData gemSpawnData = SystemAPI.GetSingleton<GemSpawnData>();
-            if (gemSpawnData.isTrigger == true)
-            {
-                Debug.LogError("true 상태다!");
-                continue;
-            }
-            gemSpawnData.isTrigger = true;
-            gemSpawnData.spawnPos = tr.ValueRO.Position;
+            GemSpawnItem item = new GemSpawnItem();
+            item.spawnPos = tr.ValueRO.Position;
+            gemSpawnData.datas.Enqueue(item);
+            
             SystemAPI.SetSingleton<GemSpawnData>(gemSpawnData);
         }
 

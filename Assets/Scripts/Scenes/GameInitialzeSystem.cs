@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -30,7 +31,7 @@ public partial struct GameInitialzeSystem : ISystem
         var entity = ecb.CreateEntity();
 
         ecb.SetName(entity, "GemSpawner");
-        ecb.AddComponent(entity, new GemSpawnData { isTrigger = false });
+        ecb.AddComponent(entity, new GemSpawnData { datas = new Unity.Collections.NativeQueue<GemSpawnItem>(Allocator.Persistent) });
     }
 
     private void CreateTimer(in SystemState state, in EntityCommandBuffer ecb)

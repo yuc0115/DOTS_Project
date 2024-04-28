@@ -14,12 +14,16 @@ public struct GemTag : IComponentData
 public struct GemData_Get : IComponentData, IEnableableComponent
 {
     public float speed;
+    public int exp;
 }
 
 public struct GemSpawnData : IComponentData
 {
+    public NativeQueue<GemSpawnItem> datas;
+}
+public struct GemSpawnItem
+{
     public float3 spawnPos;
-    public bool isTrigger; 
 }
 
 #endregion

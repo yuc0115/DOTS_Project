@@ -37,6 +37,7 @@ public partial struct PlayerGetGemSystem : ISystem
             if (Vector3.Magnitude(v) <= 0.5f)
             {
                 ecb.DestroyEntity(entity);
+                GameManager.Instance.playerData.AddExp(data.ValueRO.exp);
             }
         }
     }
