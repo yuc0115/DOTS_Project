@@ -25,6 +25,11 @@ public struct ActorData_Target : IComponentData
     public Entity entity;
 }
 
+public struct ActorData_AtkPower : IComponentData
+{
+    public int atkPower;
+}
+
 public struct ActorData_HP : IComponentData
 {
     public float hp;
@@ -55,6 +60,7 @@ public class ActorData_ModelTransform : ICleanupComponentData
 
 public class ActorData_ModelAnimator : IComponentData
 {
+    public uint skillID;
     public Animator animator;
 }
 #endregion

@@ -2,42 +2,51 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
-
-public struct ProjectileFire : IComponentData
-{
-    public double spawnTime;
-    public float spawnDelay;
-}
 
 public struct SkillData_Trigger : IComponentData
 {
-    public bool isTrigger;
-    public bool isFire;
+    public NativeList<SkillData_TriggerItem> datas;
+}
+
+public struct SkillData_TriggerItem
+{
     public uint id;
+    public double spawnTime;
+    public float spawnDelay;
+
+    // 애니메이션이 있는지.
+    public bool isAnimation;
+}
+
+public struct SkillData_Spawn : IComponentData  
+{
+    public NativeQueue<SkillData_SpawnItem> datas;
+}
+
+public struct SkillData_SpawnItem
+{
+    public uint skillID;
+    public LocalTransform tr;
+    public int atkPower;
+}
+
+public struct SkillData_MoveForward : IComponentData
+{
+    public float3 direction;
+    public float speed;
+}
+
+
+public class SkillData_ModelTransform : ICleanupComponentData
+{
+    public Transform trasnform;
 }
 
 public struct SkillData_Damage : IComponentData
 {
     public int damage;
-}
-
-public struct Projectile : IComponentData
-{
-    public float speed;
-    public float3 direction;
-}
-
-public struct ProjectileDestroyTime : IComponentData
-{
-    public double deleteTime;
-}
-
-public struct SkillData_AutoSkill : IComponentData
-{
-    public uint skillID;
-    public double fireTime;
-    public float fireDelay;
 }
 
 public class SkillData_Hit : IComponentData

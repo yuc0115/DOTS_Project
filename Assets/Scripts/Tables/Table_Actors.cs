@@ -9,10 +9,12 @@ public class Table_ActorData
     public eActorType actorType;
 
     // 스텟 관련
+    public int atkPower; // 기본 공격력
     public int hp;
     public float moveSpeed;
     public float rotSpeed;
     public int damage;
+    
 
     public float minAtkRange;
     public float maxAtkRange;
@@ -53,6 +55,7 @@ public class Table_Actors : TableBase<Table_Actors>
         data.id = 1;
         data.actorType = eActorType.Player;
 
+        data.atkPower = 10;
         data.hp = 100;
         data.moveSpeed = 10;
         data.rotSpeed = 20;
@@ -71,6 +74,7 @@ public class Table_Actors : TableBase<Table_Actors>
         data.id = 2;
         data.actorType = eActorType.Enemy;
 
+        data.atkPower = 10;
         data.hp = 100;
         data.moveSpeed = 8;
         data.rotSpeed = 20;
@@ -78,7 +82,8 @@ public class Table_Actors : TableBase<Table_Actors>
         data.minAtkRange = 3;
         data.maxAtkRange = 5;
 
-        data.skills = new uint[] { 1 };
+        //data.skills = new uint[] { 1 };
+        data.skills = null;
         data.spawnDelay = 0f;
         data.resPath = "Knight_Small";
 

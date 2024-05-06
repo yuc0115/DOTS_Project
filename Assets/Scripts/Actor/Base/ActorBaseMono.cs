@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 public class ActorBaseMono : MonoBehaviour
@@ -8,6 +9,12 @@ public class ActorBaseMono : MonoBehaviour
     private Entity _entity;
     private World _world;
     private eActorType _actorType;
+
+    /// <summary>
+    /// 스폰 되야할 스킬 아이디.
+    /// </summary>
+    private uint _curAnimClipSkillID;
+    private int _atkPower;
 
     public void Awake()
     {
@@ -19,12 +26,27 @@ public class ActorBaseMono : MonoBehaviour
         _actorType = actorType;
     }
 
+    public void AddSkillSpawnID(uint skillID, int atkPower)
+    {
+        _curAnimClipSkillID = skillID;
+        _atkPower = atkPower;
+    }
+
     #region animator event
     private void OnAnimFire()
     {
-        var data = _world.EntityManager.GetComponentData<SkillData_Trigger>(_entity);
-        data.isFire = true;
-        _world.EntityManager.SetComponentData<SkillData_Trigger>(_entity, data);
+        EntityQuery query = _world.EntityManager.CreateEntityQuery(new ComponentType[] { typeof(SkillData_Spawn) });
+        
+        SkillData_Spawn rw;
+        if (query.TryGetSingleton(out rw))
+        {
+            var tr = _world.EntityManager.GetComponentData<LocalTransform>(_entity);
+            SkillData_SpawnItem spawnItem = new SkillData_SpawnItem();
+            spawnItem.skillID = _curAnimClipSkillID;
+            spawnItem.tr = tr;
+            spawnItem.atkPower = _atkPower;
+            rw.datas.Enqueue(spawnItem);
+        }
     }
 
     private void OnAnimDeath()

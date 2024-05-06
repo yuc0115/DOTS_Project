@@ -38,3 +38,32 @@ public enum eSkillType
     None = 0,
     AutoSkill,
 }
+
+public enum eSkillSpawnType
+{
+    None = 0,
+    Time,
+}
+
+public enum eSkillMoveType
+{
+    None = 0,
+    Forward,
+    RandomTarget,
+}
+
+public enum eSkillSpawnPositionType
+{
+    None = 0,
+    Forward,
+    RandomTarget,
+}
+
+
+public enum eSkillFireType
+{
+    None = 0,
+    OneShot,
+}
+
+

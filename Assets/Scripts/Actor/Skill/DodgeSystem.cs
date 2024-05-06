@@ -28,7 +28,7 @@ public partial struct DodgeSystem : ISystem
             {
                 state.EntityManager.SetComponentEnabled<Dodge>(entity, false);
                 state.EntityManager.SetComponentEnabled<ControllEnable>(entity, true);
-            }            
+            }
         }
     }
 }

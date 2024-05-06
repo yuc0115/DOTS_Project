@@ -9,14 +9,35 @@ public partial struct SkillTriggerSystem : ISystem
 {
     void OnUpdate(ref SystemState state)
     {
-        foreach (var (skillData, animator, entity) in SystemAPI.Query<RefRW<SkillData_Trigger>, ActorData_ModelAnimator>().WithEntityAccess())
+        double elTime = SystemAPI.Time.ElapsedTime;
+        foreach (var (item, tr, atkPower, anim) in SystemAPI.Query<RefRW<SkillData_Trigger>, RefRO<LocalTransform>, RefRO<ActorData_AtkPower>, ActorData_ModelAnimator>())
         {
-            if (skillData.ValueRO.isTrigger == false)
-                continue;
-            skillData.ValueRW.isTrigger = false;
+            int length = item.ValueRO.datas.Length;
+            for (int i = 0; i < length; i++)
+            {
+                var data = item.ValueRO.datas[i];
+                if (data.spawnTime <= elTime)
+                {
+                    data.spawnTime = elTime + data.spawnDelay;
+                    item.ValueRW.datas[i] = data;
 
-            // 아이디에 맞는 애니메이터 트리거 켜줘야함.
-            animator.animator.SetTrigger("doAttack");
+                    if (data.isAnimation)
+                    {
+                        var actorMono = anim.animator.GetComponent<ActorBaseMono>();
+                        actorMono.AddSkillSpawnID(data.id, atkPower.ValueRO.atkPower);
+                        anim.animator.SetTrigger(Table_Skill.instance.GetData(data.id).animTriggerName);
+                    }
+                    else // 애니 없는경우 바로 스폰.
+                    {
+                        var skillSpawn = SystemAPI.GetSingleton<SkillData_Spawn>();
+                        SkillData_SpawnItem spawnItem = new SkillData_SpawnItem();
+                        spawnItem.skillID = data.id;
+                        spawnItem.tr = tr.ValueRO;
+                        spawnItem.atkPower = atkPower.ValueRO.atkPower;
+                        skillSpawn.datas.Enqueue(spawnItem);
+                    }
+                }
+            }
         }
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
+    public static string PathActor = "Prefabs/Actor";
+    public static string PathSkill = "Prefabs/Skill";
+
     public GameObject LoadObject(string path)
     {
         GameObject go = Resources.Load(path) as GameObject;
@@ -42,10 +45,5 @@ public class ResourceManager : Singleton<ResourceManager>
             return null;
         go = GameObject.Instantiate(go);
         return go;
-    }
-
-    public string GetPathActorRes()
-    {
-        return "Prefabs/Actor";
     }
 }
