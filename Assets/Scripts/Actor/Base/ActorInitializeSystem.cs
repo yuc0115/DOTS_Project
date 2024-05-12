@@ -25,8 +25,6 @@ public partial struct ActorInitializeSystem : ISystem
             // 모노 붙임.
             ActorBaseMono actor = actorModel.AddComponent<ActorBaseMono>();
             actor.SetEntity(entity, tableActorData.actorType);
-
-            ecb.AddComponent<ActorData_Hit>(entity);
         }
     }
 

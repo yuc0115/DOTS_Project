@@ -2,86 +2,78 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
+using Unity.Rendering;
+using Unity.Transforms;
 using UnityEngine;
 
 public partial struct SkillCollision : ISystem
 {
-    public ComponentLookup<ActorData_Hit> actorHitGroup;
-    public ComponentLookup<SkillData_Damage> skillDamageGroup;
-
-    void OnCreate(ref SystemState state)
-    {
-        actorHitGroup = state.GetComponentLookup<ActorData_Hit>();
-        skillDamageGroup = state.GetComponentLookup<SkillData_Damage>(true);
-    }
-
     void OnUpdate(ref SystemState state)
     {
-        actorHitGroup.Update(ref state);
-        skillDamageGroup.Update(ref state);
-
-        var simulation = SystemAPI.GetSingletonRW<SimulationSingleton>();
-
-        state.Dependency = new SkillCollisionJob()
+        PhysicsWorldSingleton physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+        NativeList<DistanceHit> closestHitCollector = new NativeList<DistanceHit>(state.WorldUpdateAllocator);
+        CollisionFilter filter = new CollisionFilter();
+        foreach (var (attaker, tr, size, damage, hit, entity) in SystemAPI.Query<RefRO<SkillData_Attaker>, RefRO<LocalTransform>, RefRO<SkillData_PrefabSize>, RefRO<SkillData_Damage>, SkillData_Hit>().WithAll<SkillTag>().WithEntityAccess())
         {
-            actorHitGroup = actorHitGroup,
-            skillDamageGroup = skillDamageGroup
-        }.Schedule(simulation.ValueRW, state.Dependency);
-    }
-}
+            //Debug.LogError(attaker.ValueRO.actorType);
 
-
-public struct SkillCollisionJob : ITriggerEventsJob
-{
-    public ComponentLookup<ActorData_Hit> actorHitGroup;
-    [ReadOnly] public ComponentLookup<SkillData_Damage> skillDamageGroup;
-
-    public void Execute(TriggerEvent triggerEvent)
-    {
-        var entityA = triggerEvent.EntityA;
-        var entityB = triggerEvent.EntityB;
-
-        bool ishitComponentA = actorHitGroup.HasComponent(entityA);
-        bool ishitComponentB = actorHitGroup.HasComponent(entityB);
-
-        if (ishitComponentA)
-        {
-            if (skillDamageGroup.HasComponent(entityB) == false)
+            switch (attaker.ValueRO.actorType)
             {
-                Debug.LogErrorFormat("HasComponent null! : {0}", entityB);
-                return;
-            }
-            var skillDamage = skillDamageGroup[entityB];
+                case eActorType.Player:
+                    filter.BelongsTo = (uint)ePhysicsCategoryNames.Player;
+                    filter.CollidesWith = (uint)ePhysicsCategoryNames.Enemy;
+                    break;
 
-            var hit = actorHitGroup[entityA];
-            if (hit.trigger == true)
-            {
-                Debug.LogError("충돌 중첩?");
-            }
-            hit.trigger = true;
-            hit.damage = skillDamage.damage;
-            hit.attacker = entityB;
-            actorHitGroup[entityA] = hit;
-        }
+                case eActorType.Enemy:
+                    filter.BelongsTo = (uint)ePhysicsCategoryNames.Enemy;
+                    filter.CollidesWith = (uint)ePhysicsCategoryNames.Player;
+                    break;
 
-        if (ishitComponentB)
-        {
-            if (skillDamageGroup.HasComponent(entityA) == false)
-            {
-                Debug.LogErrorFormat("HasComponent null! : {0}", entityA);
-                return;
+                default:
+                    Debug.LogError(attaker.ValueRO.actorType);
+                    break;
             }
-            var skillDamage = skillDamageGroup[entityA];
 
-            var hit = actorHitGroup[entityB];
-            if (hit.trigger == true)
+            //float3 size = tr.Scale;
+            //if (physicsWorld.OverlapBox(tr.ValueRO.Position, tr.ValueRO.Rotation, size.ValueRO.radius, ref closestHitCollector, filter))
+            //{
+            //    foreach (var pair in closestHitCollector)
+            //    {
+            //        Debug.LogError(pair.Entity);
+            //    }
+            //}
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // 스킬 히트처리 구충돌.
+            if (physicsWorld.OverlapSphere(tr.ValueRO.Position, size.ValueRO.radius, ref closestHitCollector, filter))
             {
-                Debug.LogError("충돌 중첩?");
+                foreach (var collector in closestHitCollector)
+                {
+                    //pair.Entity
+                    if (hit.hitDatas.FindIndex(x => x.hitEntity == collector.Entity) != -1)
+                        continue;
+
+                    HitDataItem item = new HitDataItem();
+                    item.hitEntity = collector.Entity;
+                    item.hitTime = SystemAPI.Time.ElapsedTime;
+
+                    hit.hitDatas.Add(item);
+
+                    // hp 감소
+                    if (state.EntityManager.HasComponent<ActorData_HP>(collector.Entity) == false)
+                    {
+                        Debug.LogErrorFormat("component is null!! entity : {0}", collector.Entity);
+                        continue;
+                    }
+                    var actorDataHP = state.EntityManager.GetComponentData<ActorData_HP>(collector.Entity);
+                    actorDataHP.hp -= damage.ValueRO.damage;
+                    state.EntityManager.SetComponentData<ActorData_HP>(collector.Entity, actorDataHP);
+
+                    // 데미지 UI처리
+                    var hitTr = state.EntityManager.GetComponentData<LocalTransform>(collector.Entity);
+                    DamageManager.Instance.SpawnDamage(hitTr.Position, damage.ValueRO.damage);
+                }
             }
-            hit.trigger = true;
-            hit.damage = skillDamage.damage;
-            hit.attacker = entityA;
-            actorHitGroup[entityB] = hit;
         }
     }
 }

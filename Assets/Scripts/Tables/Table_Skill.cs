@@ -23,6 +23,8 @@ public class Table_SkillData
     public float fireTypeValue;
 
     // 삭제 타입.
+    public eSkillDestoryType destoryType;
+    public int destoryValue;
 
     /// <summary>
     /// 애니메이터 트리거. 애니메이터 사용안하는 스킬은 비워둠.
@@ -33,14 +35,6 @@ public class Table_SkillData
 
     public string resPath;
 
-    // 사용안함
-    [Obsolete("구데이터")]
-    public eSkillType skillType;
-    
-
-    // 사용안함
-    [Obsolete("구데이터")]
-    public float fireDelay;
 }
 
 public class Table_Skill : TableBase<Table_Skill>
@@ -85,11 +79,17 @@ public class Table_Skill : TableBase<Table_Skill>
         ///////////////////////////////////////////////////////////////////////////////
         /// 이동 타입
         data.moveType = eSkillMoveType.Forward;
-        data.moveTypeValue = 1;
+        //data.moveTypeValue = 1;
+        data.moveTypeValue = 30;
         ///////////////////////////////////////////////////////////////////////////////
         /// 발사 타입
         data.fireType = eSkillFireType.OneShot;
         data.fireTypeValue = 0;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 삭제 타입
+        data.destoryType = eSkillDestoryType.Hit;
+        data.destoryValue = 1;
 
         ///////////////////////////////////////////////////////////////////////////////
         /// 애니메이터 트리거.

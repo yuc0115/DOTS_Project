@@ -17,24 +17,29 @@ public partial struct SkillSpawnSystem : ISystem
             while(spawnItems.Count > 0)
             {
                 var item = spawnItems.Dequeue();
-                SkillSpawn(ref state, item.skillID, item.tr, item.atkPower);
+                SkillSpawn(ref state, item.attackerType, item.skillID, item.tr, item.atkPower);
             }
         }
     }
 
-    private void SkillSpawn(ref SystemState state, uint id, LocalTransform tr, int atkPower)
+    private void SkillSpawn(ref SystemState state, eActorType attakerType, uint id, LocalTransform tr, int atkPower)
     {
         var resBuffer = SystemAPI.GetSingletonBuffer<ResData>();
         var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-        //var ecb = new EntityCommandBuffer(Unity.Collections.Allocator.TempJob, PlaybackPolicy.MultiPlayback);
         var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Projectile_Normal].prefab);
         var skillTable = Table_Skill.instance.GetData(id);
 
-        float3 spawnPos = SetSpawnTransform(in ecb, in entity, in skillTable, tr);
+        var prefabSize = state.EntityManager.GetComponentData<SkillData_PrefabSize>(resBuffer[(int)eResDatas.Projectile_Normal].prefab);
+
+        float3 spawnPos = float3.zero;
+        quaternion spawnRotation = quaternion.identity;
+        SetSpawnTransform(in ecb, in entity, in skillTable, tr, prefabSize.scale, out spawnPos, out spawnRotation);
 
         SetMoveType(in ecb, in entity, in skillTable, tr);
 
-        SetGOModel(in ecb, in entity, spawnPos, skillTable.resPath);
+        SetGOModel(in ecb, in entity, prefabSize.scale, spawnPos, spawnRotation, skillTable.resPath);
+
+        ecb.AddComponent(entity, new SkillData_Attaker { actorType = attakerType });
 
         // 스킬 데미지. 
         ecb.AddComponent(entity, new SkillData_Damage { damage = (int)(skillTable.damage * atkPower) });
@@ -44,14 +49,20 @@ public partial struct SkillSpawnSystem : ISystem
 
         // 히트된 애들 저장용.
         ecb.AddComponent(entity, new SkillData_Hit { hitDatas = new List<HitDataItem>() });
+
+        // 삭제 관련
+        ecb.AddComponent(entity, new SkillData_DestoryTime { time = SystemAPI.Time.ElapsedTime + 1 });
     }
 
-    private GameObject SetGOModel(in EntityCommandBuffer ecb, in Entity entity, float3 spawnPos, string prefabPath)
+    private GameObject SetGOModel(in EntityCommandBuffer ecb, in Entity entity, float scale, float3 spawnPos, quaternion rotation, string prefabPath)
     {
         GameObject goModel = ResourceManager.Instance.LoadObjectInstantiate(string.Format("{0}/{1}", ResourceManager.PathSkill, prefabPath));
-        goModel.transform.position = spawnPos;
+        Transform tr = goModel.transform;
+        tr.position = spawnPos;
+        tr.rotation = rotation;
+        tr.localScale = Vector3.one * scale;
 
-        ecb.AddComponent(entity, new SkillData_ModelTransform { trasnform = goModel.transform });
+        ecb.AddComponent(entity, new SkillData_ModelTransform { trasnform = tr });
 
         return goModel;
     }
@@ -70,29 +81,29 @@ public partial struct SkillSpawnSystem : ISystem
         }
     }
 
-    private float3 SetSpawnTransform(in EntityCommandBuffer ecb, in Entity entity, in Table_SkillData tableData, LocalTransform actorTr)
+    private void SetSpawnTransform(in EntityCommandBuffer ecb, in Entity entity, in Table_SkillData tableData, LocalTransform actorTr, float scale, out float3 spawnPos, out quaternion rotation)
     {
+        spawnPos = float3.zero;
+        rotation = quaternion.identity;
         LocalTransform tr;
-        float3 spawnPos = float3.zero;
         switch (tableData.spawnPositionType)
         {
             case eSkillSpawnPositionType.Forward:
                 spawnPos = actorTr.Position + new float3(0, 1, 0) + actorTr.Forward();
+                rotation = actorTr.Rotation;
                 tr = new LocalTransform
                 {
                     Position = spawnPos,
-                    Scale = 1,
-                    Rotation = actorTr.Rotation
+                    Scale = scale,
+                    Rotation = rotation
                 }; 
                 break;
 
             default:
                 Debug.LogError("moveType 처리안됌 : " + tableData.spawnPositionType);
-                return spawnPos;
+                return;
         }
 
         ecb.SetComponent(entity, tr);
-
-        return spawnPos;
     }
 }

@@ -8,7 +8,7 @@ public class ActorBaseMono : MonoBehaviour
 {
     private Entity _entity;
     private World _world;
-    private eActorType _actorType;
+    public eActorType _actorType;
 
     /// <summary>
     /// 스폰 되야할 스킬 아이디.
@@ -42,6 +42,7 @@ public class ActorBaseMono : MonoBehaviour
         {
             var tr = _world.EntityManager.GetComponentData<LocalTransform>(_entity);
             SkillData_SpawnItem spawnItem = new SkillData_SpawnItem();
+            spawnItem.attackerType = _actorType;
             spawnItem.skillID = _curAnimClipSkillID;
             spawnItem.tr = tr;
             spawnItem.atkPower = _atkPower;

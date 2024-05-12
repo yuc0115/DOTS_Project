@@ -20,10 +20,10 @@ public partial struct SkillTriggerSystem : ISystem
                 {
                     data.spawnTime = elTime + data.spawnDelay;
                     item.ValueRW.datas[i] = data;
+                    var actorMono = anim.animator.GetComponent<ActorBaseMono>();
 
                     if (data.isAnimation)
                     {
-                        var actorMono = anim.animator.GetComponent<ActorBaseMono>();
                         actorMono.AddSkillSpawnID(data.id, atkPower.ValueRO.atkPower);
                         anim.animator.SetTrigger(Table_Skill.instance.GetData(data.id).animTriggerName);
                     }
@@ -31,6 +31,7 @@ public partial struct SkillTriggerSystem : ISystem
                     {
                         var skillSpawn = SystemAPI.GetSingleton<SkillData_Spawn>();
                         SkillData_SpawnItem spawnItem = new SkillData_SpawnItem();
+                        spawnItem.attackerType = actorMono._actorType;
                         spawnItem.skillID = data.id;
                         spawnItem.tr = tr.ValueRO;
                         spawnItem.atkPower = atkPower.ValueRO.atkPower;

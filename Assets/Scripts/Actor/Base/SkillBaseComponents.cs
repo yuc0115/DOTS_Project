@@ -27,6 +27,7 @@ public struct SkillData_Spawn : IComponentData
 
 public struct SkillData_SpawnItem
 {
+    public eActorType attackerType;
     public uint skillID;
     public LocalTransform tr;
     public int atkPower;
@@ -38,11 +39,16 @@ public struct SkillData_MoveForward : IComponentData
     public float speed;
 }
 
-
 public class SkillData_ModelTransform : ICleanupComponentData
 {
     public Transform trasnform;
 }
+
+public struct SkillData_Attaker : IComponentData
+{
+    public eActorType actorType;
+}
+
 
 public struct SkillData_Damage : IComponentData
 {
@@ -60,12 +66,11 @@ public struct HitDataItem
     public double hitTime;
 }
 
-#region GameObject
-public class ProjectileModel : IComponentData
+public struct SkillData_DestoryTime : IComponentData
 {
-    public Transform transform;
+    public double time;
 }
-#endregion 
+
 
 #region tag
 public struct SkillTag : IComponentData

@@ -1,6 +1,7 @@
 public enum eResDatas
 {
-    Actor_normal,
+    Player,
+    Enemy,
     Projectile_Normal,
     Gem,
     End
@@ -22,7 +23,6 @@ public enum eActorType
     End,
 }
 
-
 public enum eActorState : byte
 {
     None = 0,
@@ -33,12 +33,7 @@ public enum eActorState : byte
     End,
 }
 
-public enum eSkillType
-{
-    None = 0,
-    AutoSkill,
-}
-
+#region skill
 public enum eSkillSpawnType
 {
     None = 0,
@@ -66,4 +61,12 @@ public enum eSkillFireType
     OneShot,
 }
 
+public enum eSkillDestoryType
+{
+    None = 0,
+    Hit,
+    Time,
+}
+
+#endregion
 

@@ -55,7 +55,7 @@ public partial struct GameInitialzeSystem : ISystem
     private void CreatePlayer(in SystemState state, in EntityCommandBuffer ecb, uint actorID)
     {
         var resBuffer = SystemAPI.GetSingletonBuffer<ResData>();
-        var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Actor_normal].prefab);
+        var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Player].prefab);
 
         ecb.AddComponent(entity, new PlayerTag());
 

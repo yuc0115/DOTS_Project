@@ -26,7 +26,7 @@ public partial struct EnemySpawnSystem : ISystem
 
             var resBuffer = SystemAPI.GetSingletonBuffer<ResData>();
             var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-            var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Actor_normal].prefab);
+            var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Enemy].prefab);
 
             // 태그
             ecb.AddComponent(entity, new EnemyTag());
@@ -94,7 +94,7 @@ public partial struct EnemySpawnSystem : ISystem
         }
 
         // 좌표 세팅.
-        float3 spawnPos = new float3(hit.Position.x, hit.Position.y + 1f, hit.Position.z);
+        float3 spawnPos = new float3(hit.Position.x, hit.Position.y + 0.1f, hit.Position.z);
         ecb.SetComponent(entity, new LocalTransform
         {
             Position = spawnPos,

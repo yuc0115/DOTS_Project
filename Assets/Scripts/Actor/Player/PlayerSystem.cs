@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -20,9 +21,9 @@ public partial struct PlayerSystem : ISystem
         _normal.z = vertical;
         _normal = Vector3.Normalize(_normal);
 
-        foreach (var (stat, tr) in SystemAPI.Query<RefRO<ActorData_MoveStat>, RefRW<LocalTransform>>().WithAll<PlayerTag>().WithAll<ControllEnable>())
+        foreach (var (stat, tr, pv) in SystemAPI.Query<RefRO<ActorData_MoveStat>, RefRW<LocalTransform>, RefRW<PhysicsVelocity>>().WithAll<PlayerTag>().WithAll<ControllEnable>())
         {
-            tr.ValueRW = tr.ValueRO.Translate(_normal * stat.ValueRO.moveSpeed * deltaTime);
+            pv.ValueRW.Linear = _normal * stat.ValueRO.moveSpeed;
             tr.ValueRW.Rotation = Quaternion.Lerp(tr.ValueRO.Rotation, Quaternion.LookRotation(GetLookVector(tr.ValueRO.Position)), deltaTime * stat.ValueRO.rotSpeed);
         }
 
@@ -67,8 +68,8 @@ public partial struct PlayerSystem : ISystem
 
         float3 pos = playerPos;
         float3 vMouse = float3.zero;
-        Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        UnityEngine.Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+        UnityEngine.RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
             vMouse = hit.point;

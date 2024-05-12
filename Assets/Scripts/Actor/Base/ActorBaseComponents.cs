@@ -40,13 +40,6 @@ public struct ActorData_State :IComponentData
     public eActorState actorState;
 }
 
-public struct ActorData_Hit : IComponentData
-{
-    public Entity attacker;
-    public bool trigger;
-    public int damage;
-}
-
 #region GameObject
 public struct IsActorInit : IComponentData, IEnableableComponent
 {

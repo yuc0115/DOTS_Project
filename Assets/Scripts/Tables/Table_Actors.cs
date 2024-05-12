@@ -76,13 +76,14 @@ public class Table_Actors : TableBase<Table_Actors>
 
         data.atkPower = 10;
         data.hp = 100;
-        data.moveSpeed = 8;
+        //data.moveSpeed = 8f;
+        data.moveSpeed = 0.1f;
         data.rotSpeed = 20;
         data.damage = 10;
         data.minAtkRange = 3;
         data.maxAtkRange = 5;
 
-        //data.skills = new uint[] { 1 };
+        //data.skills = new uint[] { 2 };
         data.skills = null;
         data.spawnDelay = 0f;
         data.resPath = "Knight_Small";
