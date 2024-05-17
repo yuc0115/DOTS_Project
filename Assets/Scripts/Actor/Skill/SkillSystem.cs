@@ -19,9 +19,15 @@ public partial struct SkillSystem : ISystem
         }
 
         foreach(var (model, entity) in SystemAPI.Query<SkillData_ModelTransform>().WithNone<LocalTransform>().WithEntityAccess())
-        {            
+        {
             if (model.trasnform != null)
-                GameObject.Destroy(model.trasnform.gameObject);
+            {
+                GameObject go = model.trasnform.gameObject;
+                PoolManager.Instance.ReleasePooledObject(go.name, go);
+                model.trasnform = null;
+                //GameObject.Destroy(model.trasnform.gameObject);
+            }
+            
             ecb.RemoveComponent<SkillData_ModelTransform>(entity);
         }
     }

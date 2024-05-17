@@ -27,8 +27,8 @@ public struct SkillData_Spawn : IComponentData
 
 public struct SkillData_SpawnItem
 {
+    public uint id;
     public eActorType attackerType;
-    public uint skillID;
     public LocalTransform tr;
     public int atkPower;
 }
@@ -57,6 +57,7 @@ public struct SkillData_Damage : IComponentData
 
 public class SkillData_Hit : IComponentData
 {
+    public string hitEffect;
     public List<HitDataItem> hitDatas;
 }
 
@@ -64,6 +65,11 @@ public struct HitDataItem
 {
     public Entity hitEntity;
     public double hitTime;
+}
+
+public struct SkillData_HitCount : IComponentData
+{
+    public int count;
 }
 
 public struct SkillData_DestoryTime : IComponentData

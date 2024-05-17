@@ -15,8 +15,6 @@ public partial struct SkillCollision : ISystem
         CollisionFilter filter = new CollisionFilter();
         foreach (var (attaker, tr, size, damage, hit, entity) in SystemAPI.Query<RefRO<SkillData_Attaker>, RefRO<LocalTransform>, RefRO<SkillData_PrefabSize>, RefRO<SkillData_Damage>, SkillData_Hit>().WithAll<SkillTag>().WithEntityAccess())
         {
-            //Debug.LogError(attaker.ValueRO.actorType);
-
             switch (attaker.ValueRO.actorType)
             {
                 case eActorType.Player:
@@ -45,33 +43,52 @@ public partial struct SkillCollision : ISystem
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////
             // 스킬 히트처리 구충돌.
-            if (physicsWorld.OverlapSphere(tr.ValueRO.Position, size.ValueRO.radius, ref closestHitCollector, filter))
+            if (physicsWorld.OverlapSphere(tr.ValueRO.Position, size.ValueRO.radius, ref closestHitCollector, filter) == false)
+                continue;
+            foreach (var collector in closestHitCollector)
             {
-                foreach (var collector in closestHitCollector)
+                //pair.Entity
+                if (hit.hitDatas.FindIndex(x => x.hitEntity == collector.Entity) != -1)
+                    continue;
+
+                HitDataItem item = new HitDataItem();
+                item.hitEntity = collector.Entity;
+                item.hitTime = SystemAPI.Time.ElapsedTime;
+
+                hit.hitDatas.Add(item);
+
+                // hp 감소
+                if (state.EntityManager.HasComponent<ActorData_HP>(collector.Entity) == false)
                 {
-                    //pair.Entity
-                    if (hit.hitDatas.FindIndex(x => x.hitEntity == collector.Entity) != -1)
-                        continue;
+                    Debug.LogErrorFormat("component is null!! entity : {0}", collector.Entity);
+                    continue;
+                }
+                ActorData_HP actorDataHP = state.EntityManager.GetComponentData<ActorData_HP>(collector.Entity);
+                actorDataHP.hp -= damage.ValueRO.damage;
+                state.EntityManager.SetComponentData<ActorData_HP>(collector.Entity, actorDataHP);
 
-                    HitDataItem item = new HitDataItem();
-                    item.hitEntity = collector.Entity;
-                    item.hitTime = SystemAPI.Time.ElapsedTime;
+                // 데미지 UI처리
+                LocalTransform hitTr = state.EntityManager.GetComponentData<LocalTransform>(collector.Entity);
+                DamageManager.Instance.SpawnDamage(hitTr.Position, damage.ValueRO.damage);
 
-                    hit.hitDatas.Add(item);
+                // 히트 이펙트 처리.
+                GameObject go = ResourceManager.Instance.LoadObjectInstantiate(ResourceManager.PathSkill, hit.hitEffect);
+                go.transform.position = collector.Position;
 
-                    // hp 감소
-                    if (state.EntityManager.HasComponent<ActorData_HP>(collector.Entity) == false)
+                // 히트 카운트 처리.
+                if (state.EntityManager.HasComponent<SkillData_HitCount>(entity))
+                {
+                    SkillData_HitCount hitCount = state.EntityManager.GetComponentData<SkillData_HitCount>(entity);
+                    hitCount.count--;
+                    if (hitCount.count > 0)
                     {
-                        Debug.LogErrorFormat("component is null!! entity : {0}", collector.Entity);
-                        continue;
+                        state.EntityManager.SetComponentData<SkillData_HitCount>(entity, hitCount);
                     }
-                    var actorDataHP = state.EntityManager.GetComponentData<ActorData_HP>(collector.Entity);
-                    actorDataHP.hp -= damage.ValueRO.damage;
-                    state.EntityManager.SetComponentData<ActorData_HP>(collector.Entity, actorDataHP);
-
-                    // 데미지 UI처리
-                    var hitTr = state.EntityManager.GetComponentData<LocalTransform>(collector.Entity);
-                    DamageManager.Instance.SpawnDamage(hitTr.Position, damage.ValueRO.damage);
+                    else
+                    {
+                        var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+                        ecb.DestroyEntity(entity);
+                    }
                 }
             }
         }

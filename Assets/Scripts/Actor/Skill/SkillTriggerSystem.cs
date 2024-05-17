@@ -32,7 +32,7 @@ public partial struct SkillTriggerSystem : ISystem
                         var skillSpawn = SystemAPI.GetSingleton<SkillData_Spawn>();
                         SkillData_SpawnItem spawnItem = new SkillData_SpawnItem();
                         spawnItem.attackerType = actorMono._actorType;
-                        spawnItem.skillID = data.id;
+                        spawnItem.id = data.id;
                         spawnItem.tr = tr.ValueRO;
                         spawnItem.atkPower = atkPower.ValueRO.atkPower;
                         skillSpawn.datas.Enqueue(spawnItem);

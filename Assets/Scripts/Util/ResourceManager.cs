@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
@@ -38,12 +39,10 @@ public class ResourceManager : Singleton<ResourceManager>
         return t;
     }
 
-    public GameObject LoadObjectInstantiate(string path)
+    public GameObject LoadObjectInstantiate(string folder, string path)
     {
-        GameObject go = LoadObject(path);
-        if (go == null)
-            return null;
-        go = GameObject.Instantiate(go);
+        GameObject go = PoolManager.Instance.GetPooledObject(folder, path);
+        go.name = path;
         return go;
     }
 }

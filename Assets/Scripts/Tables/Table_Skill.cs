@@ -26,6 +26,8 @@ public class Table_SkillData
     public eSkillDestoryType destoryType;
     public int destoryValue;
 
+    public string hitEffect;
+
     /// <summary>
     /// 애니메이터 트리거. 애니메이터 사용안하는 스킬은 비워둠.
     /// </summary>
@@ -75,7 +77,7 @@ public class Table_Skill : TableBase<Table_Skill>
         ///////////////////////////////////////////////////////////////////////////////
         /// 생성 타입
         data.spawnType = eSkillSpawnType.Time;
-        data.spawnTypeValue = 1f;
+        data.spawnTypeValue = 0.5f;
         ///////////////////////////////////////////////////////////////////////////////
         /// 이동 타입
         data.moveType = eSkillMoveType.Forward;
@@ -90,6 +92,8 @@ public class Table_Skill : TableBase<Table_Skill>
         /// 삭제 타입
         data.destoryType = eSkillDestoryType.Hit;
         data.destoryValue = 1;
+
+        data.hitEffect = "SkillHit_1";
 
         ///////////////////////////////////////////////////////////////////////////////
         /// 애니메이터 트리거.

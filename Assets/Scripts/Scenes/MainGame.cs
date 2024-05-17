@@ -1,22 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 
 public class MainGame : MonoBehaviour
 {
-    public World _world;
+    private static MainGame _instance;
+    public static MainGame instance => _instance;
+
+    private World _world;
 
     private void Awake()
     {
         TableManager.Instance.LoadTable();
         _world = World.DefaultGameObjectInjectionWorld;
+        _instance = this;
     }
 
     void Start()
     {
-        GameInitialize();
-        
+        GameInitialize();   
     }
 
     private void GameInitialize()

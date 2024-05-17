@@ -8,6 +8,7 @@ public class ActorBaseMono : MonoBehaviour
 {
     private Entity _entity;
     private World _world;
+    private string _poolTag;
     public eActorType _actorType;
 
     /// <summary>
@@ -16,14 +17,16 @@ public class ActorBaseMono : MonoBehaviour
     private uint _curAnimClipSkillID;
     private int _atkPower;
 
-    public void Awake()
+    private void Awake()
     {
         _world = World.DefaultGameObjectInjectionWorld;
     }
-    public void SetEntity(Entity entity, eActorType actorType)
+    
+    public void SetEntity(Entity entity, eActorType actorType, string poolTag)
     {
         _entity = entity;
         _actorType = actorType;
+        _poolTag = poolTag;
     }
 
     public void AddSkillSpawnID(uint skillID, int atkPower)
@@ -43,7 +46,7 @@ public class ActorBaseMono : MonoBehaviour
             var tr = _world.EntityManager.GetComponentData<LocalTransform>(_entity);
             SkillData_SpawnItem spawnItem = new SkillData_SpawnItem();
             spawnItem.attackerType = _actorType;
-            spawnItem.skillID = _curAnimClipSkillID;
+            spawnItem.id = _curAnimClipSkillID;
             spawnItem.tr = tr;
             spawnItem.atkPower = _atkPower;
             rw.datas.Enqueue(spawnItem);
@@ -56,7 +59,8 @@ public class ActorBaseMono : MonoBehaviour
         {
             case eActorType.Enemy:
                 var model = _world.EntityManager.GetComponentData<ActorData_ModelTransform>(_entity);
-                GameObject.Destroy(model.trasnform.gameObject);
+                PoolManager.Instance.ReleasePooledObject(_poolTag, gameObject);
+                //GameObject.Destroy(model.trasnform.gameObject);
 
                 _world.EntityManager.RemoveComponent<ActorData_ModelTransform>(_entity);
                 break;

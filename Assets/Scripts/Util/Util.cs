@@ -12,6 +12,16 @@ public static class Util
         return 100 + level * 10;
     }
 
+    public static T GetAddComponent<T>(this GameObject go) where T :Component
+    {
+        T t = go.GetComponent<T>();
+        if (t == null)
+        {
+            t = go.AddComponent<T>();
+        }
+        return t;
+    }
+
     public static void GamePause()
     {
         Time.timeScale = 0;

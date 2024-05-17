@@ -17,14 +17,9 @@ public partial struct ActorInitializeSystem : ISystem
 
             SetStatComponent(in ecb, in entity, in tableActorData);
 
-            GameObject actorModel = SetGOModel(in ecb, in entity, tr.ValueRO.Position, in tableActorData);
+            SetGOModel(in ecb, in entity, tr.ValueRO.Position, in tableActorData);
 
-            //SetSkillComponentOld(in ecb, in entity, in tableActorData);
             SetSkillComponent(in ecb, in entity, in tableActorData);
-
-            // 모노 붙임.
-            ActorBaseMono actor = actorModel.AddComponent<ActorBaseMono>();
-            actor.SetEntity(entity, tableActorData.actorType);
         }
     }
 
@@ -95,16 +90,19 @@ public partial struct ActorInitializeSystem : ISystem
     /// <param name="spawnPos"></param>
     /// <param name="tableActorData"></param>
     /// <returns></returns>
-    private GameObject SetGOModel(in EntityCommandBuffer ecb, in Entity entity, float3 spawnPos, in Table_ActorData tableActorData)
+    private void SetGOModel(in EntityCommandBuffer ecb, in Entity entity, float3 spawnPos, in Table_ActorData tableActorData)
     {
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // 모델 생성.
-        GameObject goModel = ResourceManager.Instance.LoadObjectInstantiate(string.Format("{0}/{1}", ResourceManager.PathActor,  tableActorData.resPath));
+        GameObject goModel = ResourceManager.Instance.LoadObjectInstantiate(ResourceManager.PathActor, tableActorData.resPath);
         goModel.transform.position = spawnPos;
+        goModel.name = tableActorData.resPath;
+
+        // componnet setting.
+        ActorBaseMono mono = goModel.GetAddComponent<ActorBaseMono>();
+        mono.SetEntity(entity, tableActorData.actorType, tableActorData.resPath);
 
         ecb.AddComponent(entity, new ActorData_ModelTransform { trasnform = goModel.transform });
         ecb.AddComponent(entity, new ActorData_ModelAnimator { animator = goModel.GetComponent<Animator>() });
-
-        return goModel;
     }
 }
