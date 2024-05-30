@@ -90,6 +90,20 @@ public partial struct SkillCollision : ISystem
                         ecb.DestroyEntity(entity);
                     }
                 }
+
+                if (state.EntityManager.HasComponent<SkillData_PushPower>(entity))
+                {
+                    float3 normal = math.normalize(new float3(hitTr.Position.x, 0, hitTr.Position.z) -
+                        new float3(tr.ValueRO.Position.x, 0, tr.ValueRO.Position.z));
+                    Debug.LogError(normal.y);
+                    var push = state.EntityManager.GetComponentData<SkillData_PushPower>(entity);
+
+                    var actorPush = state.EntityManager.GetComponentData<ActorData_Push>(collector.Entity);
+                    actorPush.power = push.power;
+                    actorPush.normal = normal;
+                    state.EntityManager.SetComponentData<ActorData_Push>(collector.Entity, actorPush);
+                    state.EntityManager.SetComponentEnabled<ControllEnable>(collector.Entity, false);
+                }
             }
         }
     }

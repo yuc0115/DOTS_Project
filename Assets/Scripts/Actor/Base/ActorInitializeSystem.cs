@@ -15,6 +15,8 @@ public partial struct ActorInitializeSystem : ISystem
             var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             Table_ActorData tableActorData = Table_Actors.instance.GetData(actorInit.ValueRO.actorTableID);
 
+            ecb.AddComponent(entity, new ControllEnable());
+
             SetStatComponent(in ecb, in entity, in tableActorData);
 
             SetGOModel(in ecb, in entity, tr.ValueRO.Position, in tableActorData);

@@ -524,8 +524,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnDelay: 3
   spawnTime: 0
-  normalMonster: {fileID: 5288568587078347929, guid: e752f6bfec72f6a46b29adf8fe4e104e,
-    type: 3}
 --- !u!4 &1189295587
 Transform:
   m_ObjectHideFlags: 0

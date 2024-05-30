@@ -77,7 +77,7 @@ public class Table_Actors : TableBase<Table_Actors>
         data.atkPower = 10;
         data.hp = 100;
         //data.moveSpeed = 8f;
-        data.moveSpeed = 0.1f;
+        data.moveSpeed = 3f;
         data.rotSpeed = 20;
         data.damage = 10;
         data.minAtkRange = 3;

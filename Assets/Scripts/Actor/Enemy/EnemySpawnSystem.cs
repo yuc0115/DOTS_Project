@@ -14,7 +14,7 @@ public partial struct EnemySpawnSystem : ISystem
         if (SystemAPI.HasSingleton<PlayerTag>() == false)
             return;
 
-        foreach(var (spawnTime, spawnRes) in SystemAPI.Query<RefRW<EnemySpawnTime>, RefRO<EnemySpawnRes>>())
+        foreach(var spawnTime in SystemAPI.Query<RefRW<EnemySpawnTime>>())
         {
             if (SystemAPI.HasSingleton<ResData>() == false)
                 continue;
@@ -37,6 +37,11 @@ public partial struct EnemySpawnSystem : ISystem
             ecb.AddComponent(entity, new ActorData_Target
             {
                 entity = SystemAPI.GetSingletonEntity<PlayerTag>()
+            });
+
+            ecb.AddComponent(entity, new ActorData_Push
+            {
+                power = 0
             });
 
             ecb.AddComponent(entity, new ActorData_State

@@ -8,7 +8,7 @@ public class EnemySpawnAuthoring : MonoBehaviour
     public float spawnDelay = 0.1f;
     public float spawnTime;
 
-    public GameObject normalMonster = null;
+    
 
     public class Baker : Baker<EnemySpawnAuthoring>
     {
@@ -20,19 +20,10 @@ public class EnemySpawnAuthoring : MonoBehaviour
                 spawnDelay = authoring.spawnDelay,
                 spawnTime = authoring.spawnDelay,
             });
-
-            AddComponent(entity, new EnemySpawnRes
-            {
-                entityEnemy = GetEntity(authoring.normalMonster, TransformUsageFlags.Dynamic)
-            });
         }
     }
 }
 
-public struct EnemySpawnRes : IComponentData
-{
-    public Entity entityEnemy;
-}
 
 public struct EnemySpawnTime : IComponentData
 {

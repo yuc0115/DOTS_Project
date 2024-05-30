@@ -1,5 +1,6 @@
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 #region ActorTag
@@ -33,6 +34,12 @@ public struct ActorData_AtkPower : IComponentData
 public struct ActorData_HP : IComponentData
 {
     public float hp;
+}
+
+public struct ActorData_Push : IComponentData
+{
+    public float power;
+    public float3 normal;
 }
 
 public struct ActorData_State :IComponentData

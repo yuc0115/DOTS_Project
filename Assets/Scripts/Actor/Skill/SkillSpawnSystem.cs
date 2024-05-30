@@ -53,8 +53,8 @@ public partial struct SkillSpawnSystem : ISystem
         // 히트된 애들 저장용.
         ecb.AddComponent(entity, new SkillData_Hit { hitEffect =  skillTable.hitEffect, hitDatas = new List<HitDataItem>() });
 
-        
-        
+        if (skillTable.pushPower >= 0)
+            ecb.AddComponent(entity, new SkillData_PushPower { power = skillTable.pushPower });
     }
 
     private void SetDestoryType(in EntityCommandBuffer ecb, in Entity entity, in Table_SkillData tableData, double elTime)
@@ -71,7 +71,6 @@ public partial struct SkillSpawnSystem : ISystem
         }
         // 삭제 관련
         ecb.AddComponent(entity, new SkillData_DestoryTime { time = elTime + 1 });
-        //ecb.AddComponent(entity, new SkillData_DestoryTime { time = SystemAPI.Time.ElapsedTime + 1 });
     }
 
     private GameObject SetGOModel(in EntityCommandBuffer ecb, in Entity entity, float scale, float3 spawnPos, quaternion rotation, string prefabPath)

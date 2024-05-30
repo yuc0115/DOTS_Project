@@ -77,6 +77,11 @@ public struct SkillData_DestoryTime : IComponentData
     public double time;
 }
 
+public struct SkillData_PushPower : IComponentData
+{
+    public float power;
+}
+
 
 #region tag
 public struct SkillTag : IComponentData

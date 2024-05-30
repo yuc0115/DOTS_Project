@@ -71,7 +71,7 @@ public partial struct GameInitialzeSystem : ISystem
 
         ecb.SetName(entity, "PlayerEntity");
 
-        ecb.AddComponent(entity, new ControllEnable());
+        //ecb.AddComponent(entity, new ControllEnable());
 
         // 회피 기능 추가.
         ecb.AddComponent(entity, new Dodge());

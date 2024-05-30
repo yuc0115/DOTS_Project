@@ -28,6 +28,9 @@ public class Table_SkillData
 
     public string hitEffect;
 
+    // 미는 힘
+    public float pushPower;
+
     /// <summary>
     /// 애니메이터 트리거. 애니메이터 사용안하는 스킬은 비워둠.
     /// </summary>
@@ -94,6 +97,8 @@ public class Table_Skill : TableBase<Table_Skill>
         data.destoryValue = 1;
 
         data.hitEffect = "SkillHit_1";
+
+        data.pushPower = 15;
 
         ///////////////////////////////////////////////////////////////////////////////
         /// 애니메이터 트리거.

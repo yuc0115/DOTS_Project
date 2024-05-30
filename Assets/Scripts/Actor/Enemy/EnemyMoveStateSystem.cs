@@ -14,7 +14,7 @@ public partial struct EnemyMoveStateSystem : ISystem
     {
         float deltaTime = SystemAPI.Time.DeltaTime;
 
-        foreach(var (tr, pv, target, moveStat, actorState) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<PhysicsVelocity>, RefRO<ActorData_Target>, RefRO<ActorData_MoveStat>, RefRO<ActorData_State>>().WithAll<EnemyTag>())
+        foreach (var (tr, pv, target, moveStat, actorState) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<PhysicsVelocity>, RefRO<ActorData_Target>, RefRO<ActorData_MoveStat>, RefRO<ActorData_State>>().WithAll<EnemyTag>().WithAll<ControllEnable>())
         {
             if (target.ValueRO.entity == Entity.Null)
                 continue;
@@ -26,10 +26,9 @@ public partial struct EnemyMoveStateSystem : ISystem
             float3 vNormal = math.normalize(trTarget.Position - tr.ValueRO.Position);
             vNormal.y = 0;
             pv.ValueRW.Linear = vNormal * moveStat.ValueRO.moveSpeed;
-            //tr.ValueRW = tr.ValueRO.Translate(vNormal * moveStat.ValueRO.moveSpeed * deltaTime);
             tr.ValueRW.Rotation = Quaternion.Lerp(tr.ValueRO.Rotation, Quaternion.LookRotation(vNormal), deltaTime * moveStat.ValueRO.rotSpeed);
         }
-     
+
         foreach (var (goAnim, goTr, localTr) in SystemAPI.Query<ActorData_ModelAnimator, ActorData_ModelTransform, RefRO<LocalTransform>>().WithAll<EnemyTag>())
         {
             goTr.trasnform.position = localTr.ValueRO.Position;
