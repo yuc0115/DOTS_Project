@@ -8,13 +8,16 @@ using UnityEngine;
 using Unity.Physics;
 
 
+[BurstCompile]
 public partial struct EnemyMoveStateSystem : ISystem
 {
+    [BurstCompile]
     void OnUpdate(ref SystemState state)
     {
         float deltaTime = SystemAPI.Time.DeltaTime;
 
-        foreach (var (tr, pv, target, moveStat, actorState) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<PhysicsVelocity>, RefRO<ActorData_Target>, RefRO<ActorData_MoveStat>, RefRO<ActorData_State>>().WithAll<EnemyTag>().WithAll<ControllEnable>())
+        //foreach (var (tr, pv, target, moveStat, actorState) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<PhysicsVelocity>, RefRO<ActorData_Target>, RefRO<ActorData_MoveStat>, RefRO<ActorData_State>>().WithAll<EnemyTag>().WithAll<ControllEnable>())
+        foreach (var (tr, target, moveStat, actorState) in SystemAPI.Query<RefRW<LocalTransform>, RefRO<ActorData_Target>, RefRO<ActorData_MoveStat>, RefRO<ActorData_State>>().WithAll<EnemyTag>().WithAll<ControllEnable>())
         {
             if (target.ValueRO.entity == Entity.Null)
                 continue;
@@ -25,11 +28,18 @@ public partial struct EnemyMoveStateSystem : ISystem
             LocalTransform trTarget = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.entity);
             float3 vNormal = math.normalize(trTarget.Position - tr.ValueRO.Position);
             vNormal.y = 0;
-            pv.ValueRW.Linear = vNormal * moveStat.ValueRO.moveSpeed;
-            tr.ValueRW.Rotation = Quaternion.Lerp(tr.ValueRO.Rotation, Quaternion.LookRotation(vNormal), deltaTime * moveStat.ValueRO.rotSpeed);
+            //pv.ValueRW.Linear = vNormal * moveStat.ValueRO.moveSpeed;
+            tr.ValueRW = tr.ValueRO.Translate(vNormal * moveStat.ValueRO.moveSpeed * deltaTime);
+            tr.ValueRW.Rotation = math.slerp(tr.ValueRO.Rotation, Quaternion.LookRotation(vNormal, math.up()), deltaTime * moveStat.ValueRO.rotSpeed);
         }
 
-        foreach (var (goAnim, goTr, localTr) in SystemAPI.Query<ActorData_ModelAnimator, ActorData_ModelTransform, RefRO<LocalTransform>>().WithAll<EnemyTag>())
+        NewMethod(ref state);
+    }
+
+    [BurstDiscard]
+    private void NewMethod(ref SystemState state)
+    {
+        foreach (var (goAnim, goTr, localTr, entity) in SystemAPI.Query<ActorData_ModelAnimator, ActorData_ModelTransform, RefRO<LocalTransform>>().WithAll<EnemyTag>().WithEntityAccess())
         {
             goTr.trasnform.position = localTr.ValueRO.Position;
             goTr.trasnform.rotation = localTr.ValueRO.Rotation;

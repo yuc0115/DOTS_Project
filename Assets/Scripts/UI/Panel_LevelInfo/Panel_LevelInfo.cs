@@ -47,7 +47,14 @@ public class Panel_LevelInfo : MonoBehaviour
         _sliderExp.value = _showCurExp / (float)_showMaxExp;
 
         _level.text = _showLevel.ToString();
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            LevelUp();
+        }
     }
+
+    
 
     private void LevelUp()
     {

@@ -21,6 +21,8 @@ public partial struct PlayerSystem : ISystem
         _normal.z = vertical;
         _normal = Vector3.Normalize(_normal);
 
+        if (deltaTime == 0)
+            return;
         foreach (var (stat, tr, pv) in SystemAPI.Query<RefRO<ActorData_MoveStat>, RefRW<LocalTransform>, RefRW<PhysicsVelocity>>().WithAll<PlayerTag>().WithAll<ControllEnable>())
         {
             pv.ValueRW.Linear = _normal * stat.ValueRO.moveSpeed;

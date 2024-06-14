@@ -34,6 +34,4 @@ public class PlayerData
         maxExp = Util.GetMaxExp(level);
         isLevelUp = true;
     }
-
-   
 }

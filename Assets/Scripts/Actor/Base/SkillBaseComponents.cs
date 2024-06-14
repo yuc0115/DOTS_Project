@@ -58,7 +58,7 @@ public struct SkillData_Damage : IComponentData
 public class SkillData_Hit : IComponentData
 {
     public string hitEffect;
-    public List<HitDataItem> hitDatas;
+    public NativeList<HitDataItem> hitDatas;
 }
 
 public struct HitDataItem
@@ -80,6 +80,11 @@ public struct SkillData_DestoryTime : IComponentData
 public struct SkillData_PushPower : IComponentData
 {
     public float power;
+}
+
+public struct SkillData_HitWithIntervals : IComponentData
+{
+    public float interval;
 }
 
 

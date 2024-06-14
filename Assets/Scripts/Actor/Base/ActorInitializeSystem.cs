@@ -22,6 +22,19 @@ public partial struct ActorInitializeSystem : ISystem
             SetGOModel(in ecb, in entity, tr.ValueRO.Position, in tableActorData);
 
             SetSkillComponent(in ecb, in entity, in tableActorData);
+
+
+            var gameDataEntity = SystemAPI.GetSingletonEntity<GameDataTag>();
+            if (tableActorData.actorType != eActorType.Player)
+            {
+                var buffer = state.EntityManager.GetBuffer<GameData_Enemy>(gameDataEntity);
+                buffer.Add(new GameData_Enemy { entity = entity });
+            }
+            else
+            {
+                var buffer = state.EntityManager.GetBuffer<GameData_Player>(gameDataEntity);
+                buffer.Add(new GameData_Player { entity = entity });
+            }
         }
     }
 

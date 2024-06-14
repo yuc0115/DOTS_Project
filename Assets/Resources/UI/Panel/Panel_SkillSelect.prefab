@@ -637,6 +637,7 @@ MonoBehaviour:
   - {fileID: 835965386034061741}
   - {fileID: 5734001862680945901}
   - {fileID: 4808255579953530473}
+  _atlas: {fileID: 100100200, guid: db080caee2f048447b579cfe0ee8389e, type: 3}
 --- !u!1 &1456470358639012703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,6 +1255,7 @@ MonoBehaviour:
   - {fileID: 5179760979660818400}
   - {fileID: 1723825161924594077}
   - {fileID: 6765697962041923608}
+  _atlas: {fileID: 100100200, guid: db080caee2f048447b579cfe0ee8389e, type: 3}
 --- !u!1 &2261420095747368403
 GameObject:
   m_ObjectHideFlags: 0
@@ -3000,6 +3002,7 @@ MonoBehaviour:
   - {fileID: 1412591329304474727}
   - {fileID: 3727002473159633942}
   - {fileID: 4141987828366725132}
+  _atlas: {fileID: 100100200, guid: db080caee2f048447b579cfe0ee8389e, type: 3}
 --- !u!1 &3891914986033793561
 GameObject:
   m_ObjectHideFlags: 0

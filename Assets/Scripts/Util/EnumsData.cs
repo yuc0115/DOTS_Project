@@ -42,18 +42,27 @@ public enum eSkillSpawnType
 
 public enum eSkillMoveType
 {
+    /// <summary>
+    /// 이동하지 않는 경우 사용.
+    /// </summary>
     None = 0,
+    /// <summary>
+    /// 시전자의 normal
+    /// </summary>
     Forward,
-    RandomTarget,
+    /// <summary>
+    /// 가까운 적 탐지 후 이동.
+    /// </summary>
+    MoveToNearbyEnemy,
 }
 
 public enum eSkillSpawnPositionType
 {
     None = 0,
+    MyPos,
     Forward,
-    RandomTarget,
+    ClosestTarget,
 }
-
 
 public enum eSkillFireType
 {
@@ -66,6 +75,16 @@ public enum eSkillDestoryType
     None = 0,
     Hit,
     Time,
+}
+
+/// <summary>
+/// 단일 타겟에 대한 히트 타입. 
+/// </summary>
+public enum eSkillHitType
+{
+     None = 0,
+     HitCount = 0,
+     HitWithIntervals,
 }
 
 #endregion

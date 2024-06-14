@@ -13,10 +13,5 @@ public class DamageManager : Singleton<DamageManager>
     {
         DamageNumber prefab = _damagePrefabs;
         DamageNumber damageNumber = prefab.Spawn(spawnPos, damage);
-
-        //damageNumber.enableFollowing = true;
-        //damageNumber.followedTarget = enemy.GetPelvis();
-        //Apply Demo Settings:
-        //settings.Apply(newDamageNumber);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -7,8 +8,10 @@ using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
+[BurstCompile]
 public partial struct EnemyStateSystem : ISystem
 {
+    [BurstCompile]
     void OnUpdate(ref SystemState state)
     {
         foreach (var (actorState, target, rangeStat, tr, actorHP) in SystemAPI.Query<RefRW<ActorData_State>, RefRO<ActorData_Target>, RefRO<ActorData_AtkRangeStat>, RefRO<LocalTransform>, RefRO<ActorData_HP>>().WithAll<EnemyTag>())

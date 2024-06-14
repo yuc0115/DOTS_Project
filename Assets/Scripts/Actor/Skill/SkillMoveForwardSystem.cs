@@ -14,6 +14,8 @@ public partial struct SkillMoveForwardSystem : ISystem
         foreach (var (item, tr, entity) in SystemAPI.Query<RefRO<SkillData_MoveForward>, RefRW<LocalTransform>>().WithEntityAccess())
         {
             tr.ValueRW = tr.ValueRO.Translate(item.ValueRO.direction * item.ValueRO.speed * deltaTime);
+            quaternion targetRotation = Quaternion.LookRotation(item.ValueRO.direction, Vector3.up);
+            tr.ValueRW.Rotation = targetRotation;
         }
 
         foreach (var (goTr, localTr) in SystemAPI.Query<SkillData_ModelTransform, RefRO<LocalTransform>>().WithAll<SkillTag>())

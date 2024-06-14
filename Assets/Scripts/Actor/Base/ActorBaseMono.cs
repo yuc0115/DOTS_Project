@@ -51,7 +51,7 @@ public class ActorBaseMono : MonoBehaviour
             spawnItem.atkPower = _atkPower;
             rw.datas.Enqueue(spawnItem);
         }
-    }
+    } 
 
     private void OnAnimDeath()
     {
@@ -61,7 +61,6 @@ public class ActorBaseMono : MonoBehaviour
                 var model = _world.EntityManager.GetComponentData<ActorData_ModelTransform>(_entity);
                 PoolManager.Instance.ReleasePooledObject(_poolTag, gameObject);
                 //GameObject.Destroy(model.trasnform.gameObject);
-
                 _world.EntityManager.RemoveComponent<ActorData_ModelTransform>(_entity);
                 break;
 
