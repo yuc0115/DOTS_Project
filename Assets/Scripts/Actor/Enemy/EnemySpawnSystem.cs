@@ -51,56 +51,6 @@ public partial struct EnemySpawnSystem : ISystem
         });
 
         ecb.AddComponent(entity, new IsActorInit { actorTableID = 2 });
-
-        //ecb.Playback(state.EntityManager);
-        //ecb.Dispose();
-
-        //foreach(var spawnTime in SystemAPI.Query<RefRW<EnemySpawnTime>>())
-        //{
-        //    if (SystemAPI.HasSingleton<ResData>() == false)
-        //        continue;
-
-        //    if (spawnTime.ValueRO.spawnTime >= SystemAPI.Time.ElapsedTime)
-        //        return;
-
-        //    spawnTime.ValueRW.spawnTime += spawnTime.ValueRO.spawnDelay;
-
-        //    //var ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
-
-
-        //    var resBuffer = SystemAPI.GetSingletonBuffer<ResData>();
-        //    var ecb = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-        //    var entity = ecb.Instantiate(resBuffer[(int)eResDatas.Enemy].prefab);
-
-        //    // 태그
-        //    ecb.AddComponent(entity, new EnemyTag());
-
-        //    SetPosComponent(ref ecb, ref entity);
-
-        //    // 타겟 설정.
-        //    ecb.AddComponent(entity, new ActorData_Target
-        //    {
-        //        entity = SystemAPI.GetSingletonEntity<PlayerTag>()
-        //    });
-
-        //    ecb.AddComponent(entity, new ActorData_Push
-        //    {
-        //        power = 0
-        //    });
-
-        //    ecb.AddComponent(entity, new ActorData_State
-        //    {
-        //        actorState = eActorState.Idle
-        //    });
-
-        //    ecb.AddComponent(entity, new IsActorInit { actorTableID = 2 });
-
-        //    var buffer = state.EntityManager.GetBuffer<ActorData_TargetBuffer>(SystemAPI.GetSingletonEntity<PlayerTag>());
-        //    buffer.Add(new ActorData_TargetBuffer { entity = entity });
-
-        //    ecb.Playback(state.EntityManager);
-        //    ecb.Dispose();
-        //}
     }
 
     private void SetPosComponent(ref EntityCommandBuffer ecb, ref Entity entity)

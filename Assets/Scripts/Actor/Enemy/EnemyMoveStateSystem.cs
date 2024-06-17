@@ -33,11 +33,11 @@ public partial struct EnemyMoveStateSystem : ISystem
             tr.ValueRW.Rotation = math.slerp(tr.ValueRO.Rotation, Quaternion.LookRotation(vNormal, math.up()), deltaTime * moveStat.ValueRO.rotSpeed);
         }
 
-        NewMethod(ref state);
+        UpdateGO(ref state);
     }
 
     [BurstDiscard]
-    private void NewMethod(ref SystemState state)
+    private void UpdateGO(ref SystemState state)
     {
         foreach (var (goAnim, goTr, localTr, entity) in SystemAPI.Query<ActorData_ModelAnimator, ActorData_ModelTransform, RefRO<LocalTransform>>().WithAll<EnemyTag>().WithEntityAccess())
         {

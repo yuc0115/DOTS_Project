@@ -54,6 +54,15 @@ public enum eSkillMoveType
     /// 가까운 적 탐지 후 이동.
     /// </summary>
     MoveToNearbyEnemy,
+    /// <summary>
+    /// 
+    /// </summary>
+    RandomBouncingSphere,
+
+    /// <summary>
+    /// 캐스터 주변 회전.
+    /// </summary>
+    RotationAround
 }
 
 public enum eSkillSpawnPositionType
@@ -62,6 +71,7 @@ public enum eSkillSpawnPositionType
     MyPos,
     Forward,
     ClosestTarget,
+    CasterNear,
 }
 
 public enum eSkillFireType

@@ -28,7 +28,8 @@ public struct SkillData_Spawn : IComponentData
 public struct SkillData_SpawnItem
 {
     public uint id;
-    public eActorType attackerType;
+    public Entity caster;
+    public eActorType casterType;
     public LocalTransform tr;
     public int atkPower;
 }
@@ -38,6 +39,21 @@ public struct SkillData_MoveForward : IComponentData
     public float3 direction;
     public float speed;
 }
+
+public struct SkillData_RandomBouncingSphere : IComponentData
+{
+    public Entity caster;
+    public float3 direction;
+    public float doundary;
+    public float speed;
+}
+
+public struct SkillData_RotationAround : IComponentData
+{
+    public Entity caster;
+    public float speed;
+}
+
 
 public class SkillData_ModelTransform : ICleanupComponentData
 {

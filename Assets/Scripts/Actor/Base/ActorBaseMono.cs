@@ -45,7 +45,8 @@ public class ActorBaseMono : MonoBehaviour
         {
             var tr = _world.EntityManager.GetComponentData<LocalTransform>(_entity);
             SkillData_SpawnItem spawnItem = new SkillData_SpawnItem();
-            spawnItem.attackerType = _actorType;
+            spawnItem.caster = _entity;
+            spawnItem.casterType = _actorType;
             spawnItem.id = _curAnimClipSkillID;
             spawnItem.tr = tr;
             spawnItem.atkPower = _atkPower;

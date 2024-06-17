@@ -63,7 +63,7 @@ public class Table_Actors : TableBase<Table_Actors>
         data.minAtkRange = 100;
         data.maxAtkRange = 100;
 
-        data.skills = new uint[] {1};
+        data.skills = new uint[] {1, 6};
         data.spawnDelay = 0f;
         data.resPath = "PlayerModel";
 

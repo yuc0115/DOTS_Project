@@ -265,5 +265,96 @@ public class Table_Skill : TableBase<Table_Skill>
 
         data.resPath = "Skill_4";
         _data.Add(data.id, data);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        data = new Table_SkillData();
+        data.id = 5;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        ///스킬 설명 및 이름
+        data.name = "당구공";
+        data.description = "일정 시간 전장을 순회한다";
+        data.iconName = "Lightning";
+
+        data.scale = 3.0f;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        data.damage = 1.0f;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 초기 생성 위치
+        data.spawnPositionType = eSkillSpawnPositionType.MyPos;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 생성 타입
+        data.spawnType = eSkillSpawnType.Time;
+        data.spawnTypeValue = 1.0f;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 이동 타입
+        data.moveType = eSkillMoveType.RandomBouncingSphere;
+        data.moveTypeValue = 15;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 발사 타입
+        data.fireType = eSkillFireType.OneShot;
+        data.fireTypeValue = 0;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 삭제 타입
+        data.destoryType = eSkillDestoryType.Time;
+        data.destoryValue = 10;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 히트 타입
+        data.hitType = eSkillHitType.HitWithIntervals;
+        data.hitTypeValue = 0.5f;
+
+        //data.hitEffect = "SkillHit_1";
+
+
+        data.resPath = "Skill_4";
+        _data.Add(data.id, data);
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        data = new Table_SkillData();
+        data.id = 6;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        ///스킬 설명 및 이름
+        data.name = "회전";
+        data.description = "일정 시간 캐릭터를 순회한다";
+        data.iconName = "Lightning";
+
+        data.scale = 3.0f;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        data.damage = 1.0f;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 초기 생성 위치
+        data.spawnPositionType = eSkillSpawnPositionType.CasterNear;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 생성 타입
+        data.spawnType = eSkillSpawnType.Time;
+        data.spawnTypeValue = 1.0f;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 이동 타입
+        data.moveType = eSkillMoveType.RotationAround;
+        data.moveTypeValue = 15;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 발사 타입
+        data.fireType = eSkillFireType.OneShot;
+        data.fireTypeValue = 0;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 삭제 타입
+        data.destoryType = eSkillDestoryType.Time;
+        data.destoryValue = 10;
+        ///////////////////////////////////////////////////////////////////////////////
+        /// 히트 타입
+        data.hitType = eSkillHitType.HitWithIntervals;
+        data.hitTypeValue = 0.5f;
+
+        //data.hitEffect = "SkillHit_1";
+
+
+        data.resPath = "Skill_4";
+        _data.Add(data.id, data);
     }
 }

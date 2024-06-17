@@ -10,7 +10,7 @@ public partial struct SkillTriggerSystem : ISystem
     void OnUpdate(ref SystemState state)
     {
         double elTime = SystemAPI.Time.ElapsedTime;
-        foreach (var (item, tr, atkPower, anim) in SystemAPI.Query<RefRW<SkillData_Trigger>, RefRO<LocalTransform>, RefRO<ActorData_AtkPower>, ActorData_ModelAnimator>())
+        foreach (var (item, tr, atkPower, anim, entity) in SystemAPI.Query<RefRW<SkillData_Trigger>, RefRO<LocalTransform>, RefRO<ActorData_AtkPower>, ActorData_ModelAnimator>().WithEntityAccess())
         {
             int length = item.ValueRO.datas.Length;
             for (int i = 0; i < length; i++)
@@ -31,7 +31,8 @@ public partial struct SkillTriggerSystem : ISystem
                     {
                         var skillSpawn = SystemAPI.GetSingleton<SkillData_Spawn>();
                         SkillData_SpawnItem spawnItem = new SkillData_SpawnItem();
-                        spawnItem.attackerType = actorMono._actorType;
+                        spawnItem.caster = entity;
+                        spawnItem.casterType = actorMono._actorType;
                         spawnItem.id = data.id;
                         spawnItem.tr = tr.ValueRO;
                         spawnItem.atkPower = atkPower.ValueRO.atkPower;
